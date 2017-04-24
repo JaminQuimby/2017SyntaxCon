@@ -1,0 +1,23 @@
+<app-nav></app-nav>
+<h1>Progressive Web - Offline Mode</h1>
+<sky-list [data]="items" [defaultView]="grid">
+  <sky-list-toolbar>
+    <sky-list-secondary-actions>
+      <sky-list-column-selector-action [gridView]="grid">
+      </sky-list-column-selector-action>
+    </sky-list-secondary-actions>
+  </sky-list-toolbar>
+<sky-toolbar>
+  <sky-toolbar-item>
+    <button class="sky-btn sky-btn-primary" (click)="openModal('defaultModal')" >Add Task</button>
+  </sky-toolbar-item>
+</sky-toolbar>
+  <sky-list-view-grid fit="scroll" #grid>
+    <sky-grid-column field="person" heading="Person" description="A person">
+    </sky-grid-column>
+    <sky-grid-column field="task" heading="Task" description="A task">
+    </sky-grid-column>
+    <sky-grid-column field="description" heading="Description" description="A discription">
+    </sky-grid-column>
+  </sky-list-view-grid>
+</sky-list>
