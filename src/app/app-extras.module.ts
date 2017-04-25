@@ -1,19 +1,16 @@
 import { NgModule } from '@angular/core';
-import { AngularFireModule } from 'angularfire2';
+import { AngularFireModule, AuthProviders, AuthMethods } from 'angularfire2';
 import { OfflineModeModalComponent } from './offlinemode/offlinemodemodal.component';
 
+/*
 import { SkyAppBootstrapper } from '@blackbaud/skyux-builder/runtime/bootstrapper';
-
 (SkyAppBootstrapper as any).processBootstrapConfig = () => {
   return new Promise((resolve, reject) => {
-    reject(
-
-      window.location.replace("http://jaminquimby.com");
-
-    //resolve(true)
+  //  reject(false);
+    resolve(true);
   });
 };
-
+*/
 const firebaseConfig = {
   apiKey: 'AIzaSyAiHb8ByUNWBdeKZWIZyUapBMxSggLiJIg',
   authDomain: 'otg2017-f4d23.firebaseapp.com',
@@ -25,7 +22,10 @@ const firebaseConfig = {
 // Specify entry components, module-level providers, etc. here.
 @NgModule({
   imports: [
-    AngularFireModule.initializeApp(firebaseConfig)
+    AngularFireModule.initializeApp(firebaseConfig, {
+      provider: AuthProviders.Password,
+      method: AuthMethods.Password
+    })
   ],
   providers: [],
   entryComponents: [

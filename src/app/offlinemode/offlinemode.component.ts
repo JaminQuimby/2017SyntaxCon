@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { AngularFire, FirebaseListObservable } from 'angularfire2';
+import { AngularFire, FirebaseListObservable, AuthProviders } from 'angularfire2';
 import { Observable } from 'rxjs/Observable';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { SkyModalService, SkyModalCloseArgs } from '@blackbaud/skyux/dist/core';
@@ -15,9 +15,20 @@ export class OfflineModeComponent {
   public tasks: FirebaseListObservable<any>;
   public items: BehaviorSubject<Array<any>> = new BehaviorSubject([]);
   public nItems: Array<any> = [];
+  private user: Object;
   constructor(
     private af: AngularFire,
     private modal: SkyModalService) {
+    this.af.auth.subscribe(user => {
+      if (user) {
+        // user logged in
+        this.user = user;
+      }
+      else {
+        // user not logged in
+        this.user = {};
+      }
+    });
     toolbox.options.debug = false;
     toolbox.router.post('(.*)', toolbox.networkFirst);
     toolbox.router.get('/offlinemode(.*)', toolbox.networkFirst, {
