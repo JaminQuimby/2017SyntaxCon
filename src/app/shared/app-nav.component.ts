@@ -12,8 +12,8 @@ export class AppNavComponent {
       path: '/'
     },
     {
-      name: 'Offline Mode',
-      path: '/offlinemode'
+      name: 'Task List',
+      path: '/tasklist'
     }
   ];
 }
