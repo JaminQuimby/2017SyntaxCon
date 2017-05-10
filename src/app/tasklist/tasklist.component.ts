@@ -3,15 +3,15 @@ import { AngularFire, FirebaseListObservable, AuthProviders } from 'angularfire2
 import { Observable } from 'rxjs/Observable';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { SkyModalService, SkyModalCloseArgs } from '@blackbaud/skyux/dist/core';
-import { OfflineModeContext } from './offlinemode.context';
-import { OfflineModeModalComponent } from './offlinemodemodal.component';
+import { TaskListContext } from './tasklist.context';
+import { TaskListModalComponent } from './tasklistmodal.component';
 import * as toolbox from 'sw-toolbox';
 
 @Component({
-  selector: 'my-offlinemode',
-  templateUrl: './offlinemode.component.html'
+  selector: 'my-tasklist',
+  templateUrl: './tasklist.component.html'
 })
-export class OfflineModeComponent {
+export class TaskListComponent {
   public tasks: FirebaseListObservable<any>;
   public items: BehaviorSubject<Array<any>> = new BehaviorSubject([]);
   public nItems: Array<any> = [];
@@ -31,11 +31,11 @@ export class OfflineModeComponent {
     });
     toolbox.options.debug = false;
     toolbox.router.post('(.*)', toolbox.networkFirst);
-    toolbox.router.get('/offlinemode(.*)', toolbox.networkFirst, {
+    toolbox.router.get('/tasklist(.*)', toolbox.networkFirst, {
       debug: false,
       networkTimeoutSeconds: 4,
       cache: {
-        name: 'offlinemode-cache-v1',
+        name: 'tasklist-cache-v1',
         maxEntries: 10,
         maxAgeSeconds: 200
       }
@@ -58,13 +58,13 @@ export class OfflineModeComponent {
   }
 
   public openModal(type: string) {
-    let context = new OfflineModeContext();
+    let context = new TaskListContext();
     let windowMode: any = {
       'defaultModal': {
-        'providers': [{ provide: OfflineModeContext, useValue: context }]
+        'providers': [{ provide: TaskListContext, useValue: context }]
       }
     };
-    let modalInstance = this.modal.open(OfflineModeModalComponent, windowMode[type]);
+    let modalInstance = this.modal.open(TaskListModalComponent, windowMode[type]);
     modalInstance.closed.subscribe((result: SkyModalCloseArgs) => {
       console.log('Modal closed with reason: ' + result.reason + ' and data: ' + result.data);
       console.log(result.data.description)

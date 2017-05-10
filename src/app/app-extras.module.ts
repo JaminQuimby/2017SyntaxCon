@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { AngularFireModule, AuthProviders, AuthMethods } from 'angularfire2';
-import { OfflineModeModalComponent } from './offlinemode/offlinemodemodal.component';
+import { TaskListModalComponent } from './tasklist/tasklistmodal.component';
 
 /*
 import { SkyAppBootstrapper } from '@blackbaud/skyux-builder/runtime/bootstrapper';
@@ -29,7 +29,7 @@ const firebaseConfig = {
   ],
   providers: [],
   entryComponents: [
-    OfflineModeModalComponent
+    TaskListModalComponent
   ]
 })
 export class AppExtrasModule { }
