@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
-import { AngularFireModule, AuthProviders, AuthMethods } from 'angularfire2';
-import { TaskListModalComponent } from './tasklist/tasklistmodal.component';
+import { AngularFireModule } from 'angularfire2';
+import { AngularFireDatabaseModule, AngularFireDatabase, FirebaseListObservable } from 'angularfire2/database';
+import { AngularFireAuthModule, AngularFireAuth } from 'angularfire2/auth';
 
 /*
 import { SkyAppBootstrapper } from '@blackbaud/skyux-builder/runtime/bootstrapper';
@@ -11,25 +12,27 @@ import { SkyAppBootstrapper } from '@blackbaud/skyux-builder/runtime/bootstrappe
   });
 };
 */
-const firebaseConfig = {
-  apiKey: 'AIzaSyAiHb8ByUNWBdeKZWIZyUapBMxSggLiJIg',
-  authDomain: 'otg2017-f4d23.firebaseapp.com',
-  databaseURL: 'https://otg2017-f4d23.firebaseio.com',
-  projectId: 'otg2017-f4d23',
-  storageBucket: 'otg2017-f4d23.appspot.com',
-  messagingSenderId: '131069844360'
+const environment = {
+  production: false,
+  firebase: {
+    apiKey: 'AIzaSyAiHb8ByUNWBdeKZWIZyUapBMxSggLiJIg',
+    authDomain: 'otg2017-f4d23.firebaseapp.com',
+    databaseURL: 'https://otg2017-f4d23.firebaseio.com',
+    projectId: 'otg2017-f4d23',
+    storageBucket: 'otg2017-f4d23.appspot.com',
+    messagingSenderId: '131069844360'
+  }
 };
 // Specify entry components, module-level providers, etc. here.
 @NgModule({
   imports: [
-    AngularFireModule.initializeApp(firebaseConfig, {
-      provider: AuthProviders.Password,
-      method: AuthMethods.Password
-    })
+    AngularFireModule.initializeApp(environment.firebase),
+    AngularFireDatabaseModule,
+    AngularFireAuthModule
   ],
   providers: [],
   entryComponents: [
-    TaskListModalComponent
+
   ]
 })
 export class AppExtrasModule { }

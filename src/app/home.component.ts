@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { AngularFire, AuthProviders } from 'angularfire2';
+import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2/database';
 
 @Component({
   selector: 'my-home',
@@ -8,8 +8,9 @@ import { AngularFire, AuthProviders } from 'angularfire2';
 export class HomeComponent {
   user = {};
   constructor(
-    public af: AngularFire
+    public db: AngularFireDatabase
   ) {
+    /*
     this.af.auth.subscribe(user => {
       if(user) {
         // user logged in
@@ -20,15 +21,17 @@ export class HomeComponent {
         this.user = {};
       }
     });
+    */
   }
 
   login() {
+    /*
   this.af.auth.login({
     provider: AuthProviders.Google
-  });
+  });*/
 }
  
-logout() {
-  this.af.auth.logout();
+logout() {/*
+  this.af.auth.logout();*/
 }
 }
