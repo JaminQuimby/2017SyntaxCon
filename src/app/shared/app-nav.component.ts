@@ -14,6 +14,10 @@ export class AppNavComponent {
     {
       name: 'Task List',
       path: '/tasklist'
+    },
+    {
+      name: 'Peer Chat',
+      path: '/peerchat'
     }
   ];
 }
