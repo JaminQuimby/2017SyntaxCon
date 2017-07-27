@@ -63,6 +63,13 @@ export class TaskListComponent implements OnInit {
     this.peerservice.peerid.subscribe((id) => {
       this.peerid = id;
     });
+    this.peerservice.msg.subscribe((message) => {
+      let items = [];
+      items.push(message);
+      let nItems = this.nItems.reverse().concat(items);
+      this.items.next(nItems.reverse());
+
+    });
   }
 
   // Skyux Modal with a form inside.

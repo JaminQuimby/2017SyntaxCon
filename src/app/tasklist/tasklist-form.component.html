@@ -3,22 +3,29 @@
     Task {{peerid}}
   </sky-modal-header>
   <sky-modal-content>
+        <div>
+      <label>
+      Peer
+      <input type="text" [(ngModel)]="friend" class="sky-form-control" (change)="collaborate()">
+    </label>
+    </div>
     <div>
       <label>
       Person
-      <input type="text" [(ngModel)]="context.person" class="sky-form-control">
+      <input type="text" [(ngModel)]="context.person" class="sky-form-control" (change)="collaborate()">
     </label>
     </div>
     <div>
       <label>
       Task
-      <input type="text" [(ngModel)]="context.task" class="sky-form-control">
+      <input type="text" [(ngModel)]="context.task" class="sky-form-control" (change)="collaborate()">
     </label>
     </div>
     <div>
       <label>
       Description
       <input type="text"
+      (change)="collaborate()"
       [(ngModel)]="context.description"
       class="sky-form-control">
     </label>

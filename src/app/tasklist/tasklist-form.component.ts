@@ -10,6 +10,7 @@ import { PeerService } from '../shared/peer.service';
 
 export class TasklistFormModalComponent implements OnInit {
   public peerid: string;
+  public friend: string;
 
   constructor(
     public context: TaskListContext,
@@ -20,6 +21,17 @@ export class TasklistFormModalComponent implements OnInit {
     this.peerservice.peerid.subscribe((id) => {
       this.peerid = id;
     });
+
+  }
+
+  public collaborate() {
+    let obj = {
+      'id': 999999,
+      'task': this.context.task,
+      'person': this.context.person,
+      'description': this.context.description
+    };
+    this.peerservice.send(this.friend, obj);
 
   }
 }

@@ -7,9 +7,12 @@ import './peer.js';
 @Injectable()
 export class PeerService {
   //    public peerid: Subject<any> = new Subject();
+
   private peer: any;
   private peerconn: any;
+  private isConnected: boolean;
   public peerid: BehaviorSubject<any> = new BehaviorSubject(undefined);
+  public msg: BehaviorSubject<any> = new BehaviorSubject({});
   constructor() {
 
   }
@@ -24,12 +27,15 @@ export class PeerService {
       });
       this.peer.on('open', function (id: string) {
         resolve(id);
+        this.isConnected = true;
       });
-
-      this.peer.on('connection', function (con: any) {
-        con.on('data', function (data: any) {
+      this.peer.on('disconnected', function () {
+        this.isConnected = false;
+      });
+      this.peer.on('connection', (con: any) => {
+        con.on('data', (data: any) => {
           console.log('Incoming data', data);
-          con.send('REPLY');
+          this.msg.next(data);
         });
       });
 
@@ -38,19 +44,32 @@ export class PeerService {
 
   }
 
-  public connect(id: string) {
-    this.peerconn = this.peer.connect(id);
+  public send(id: string, message: any) {
+    if (this.isConnected) {
+      console.warn('message sent');
+      this.peerconn.send(message);
+    } else {
+      console.warn('offline trying again on' + id);
+      let promise = new Promise((resolve, reject) => {
+        this.peerconn = this.peer.connect(id);
+        resolve(id);
+      });
+      promise.then((value) => {
+        this.isConnected = true;
+        this.peerconn.send(message);
+      });
 
-    // Receive messages
-    this.peerconn.on('open', (data: any) => {
-      this.peerconn.send('test');
-    });
-
+    }
   }
+  /*
+    private connect(id: string, message: any) {
+      this.peerconn = this.peer.connect(id);
 
-  public send(message: any) {
-
-    this.peerconn.send('test');
-  }
+      // Receive messages
+      this.peerconn.on('open', (data: any) => {
+        this.peerconn.send(message);
+      });
+    }
+    */
 
 }
