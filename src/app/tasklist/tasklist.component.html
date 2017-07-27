@@ -1,7 +1,5 @@
 <h1>
   Task List</h1>
-<h3 *ngIf="peerid">ID: {{peerid}}</h3>
-
 <sky-list [data]="items" [defaultView]="grid">
   <sky-list-toolbar>
     <sky-list-secondary-actions>
@@ -12,9 +10,11 @@
   <sky-toolbar>
     <sky-toolbar-item>
       <span class="sky-input-group-btn sky-input-group-clear">
-      <button class="sky-btn sky-btn-primary" (click)="openModal('defaultModal')" (click)="send()">Add Task</button>
+      <button class="sky-btn sky-btn-primary" (click)="openModal('defaultModal')" >Add Task</button>
       <input type="text" [(ngModel)]="anotherid" class="sky-form-control">
+          <span class="sky-form-control" *ngIf="peerid">{{peerid}}</span>
       </span>
+
     </sky-toolbar-item>
   </sky-toolbar>
   <sky-list-view-grid fit="scroll" #grid>

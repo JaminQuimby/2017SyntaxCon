@@ -1,11 +1,9 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2/database';
-import { Observable } from 'rxjs/Observable';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import { SkyModalService, SkyModalCloseArgs } from '@blackbaud/skyux/dist/core';
-import * as toolbox from 'sw-toolbox';
+import {  FirebaseListObservable } from 'angularfire2/database';
+
+// import * as toolbox from 'sw-toolbox';
 declare var Peer: any;
-import './peer.js';
+import '../shared/peer.js';
 
 @Component({
   selector: 'my-chat',
@@ -13,17 +11,19 @@ import './peer.js';
 })
 
 export class ChatComponent implements OnInit {
-  @ViewChild('myvideo') myVideo: any;
+  @ViewChild('myvideo')
+  public myVideo: any;
   public tasks: FirebaseListObservable<any>;
   public nItems: Array<any> = [];
-  private user: Object;
+  // private user: Object;
   public peer: any;
   public anotherid: string;
   public mypeerid: string;
 
   constructor(
-    private db: AngularFireDatabase,
-    private modal: SkyModalService) {
+    // private db: AngularFireDatabase,
+    //  private modal: SkyModalService
+  ) {
   }
   public ngOnInit() {
     let video = this.myVideo.nativeElement;
@@ -36,16 +36,19 @@ export class ChatComponent implements OnInit {
       this.mypeerid = this.peer.id;
     }, 3000);
 
-
     this.peer.on('connection', function (conn: any) {
       conn.on('data', function (data: any) {
         console.log(data);
       });
     });
 
-    var n = <any>navigator;
+    let n = <any>navigator;
 
-    n.getUserMedia = (n.getUserMedia || n.webkitGetUserMedia || n.mozGetUserMedia || n.msGetUserMedia);
+    n.getUserMedia = (
+      n.getUserMedia ||
+      n.webkitGetUserMedia ||
+      n.mozGetUserMedia ||
+      n.msGetUserMedia);
 
     this.peer.on('call', function (call: any) {
 
@@ -54,37 +57,42 @@ export class ChatComponent implements OnInit {
         call.on('stream', function (remotestream: any) {
           video.src = URL.createObjectURL(remotestream);
           video.play();
-        })
+        });
       }, function (err: any) {
         console.log('Failed to get stream', err);
-      })
-    })
+      });
+    });
   }
 
   public connect() {
-    var conn = this.peer.connect(this.anotherid);
+    let conn = this.peer.connect(this.anotherid);
     conn.on('open', function () {
       conn.send('Message from that id');
     });
   }
 
- public videoconnect() {
+  public videoconnect() {
     let video = this.myVideo.nativeElement;
-    var localvar = this.peer;
-    var fname = this.anotherid;
+    let localvar = this.peer;
+    let fname = this.anotherid;
 
-    var n = <any>navigator;
+    let n = <any>navigator;
 
-    n.getUserMedia = (n.getUserMedia || n.webkitGetUserMedia || n.mozGetUserMedia || n.msGetUserMedia);
+    n.getUserMedia = (
+      n.getUserMedia ||
+      n.webkitGetUserMedia ||
+      n.mozGetUserMedia ||
+      n.msGetUserMedia
+    );
 
     n.getUserMedia({ video: true, audio: true }, function (stream: any) {
-      var call = localvar.call(fname, stream);
+      let call = localvar.call(fname, stream);
       call.on('stream', function (remotestream: any) {
         video.src = URL.createObjectURL(remotestream);
         video.play();
-      })
+      });
     }, function (err: any) {
       console.log('Failed to get stream', err);
-    })
+    });
   }
 }

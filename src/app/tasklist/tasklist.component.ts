@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2/database';
-import { Observable } from 'rxjs/Observable';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { SkyModalService, SkyModalCloseArgs } from '@blackbaud/skyux/dist/core';
 import { TaskListContext } from './tasklist.context';
@@ -10,8 +9,7 @@ import { PeerService } from '../shared/peer.service';
 
 @Component({
   selector: 'my-tasklist',
-  templateUrl: './tasklist.component.html',
-  providers: [PeerService]
+  templateUrl: './tasklist.component.html'
 })
 
 export class TaskListComponent implements OnInit {
@@ -19,10 +17,8 @@ export class TaskListComponent implements OnInit {
   public tasks: FirebaseListObservable<any>;
   public items: BehaviorSubject<Array<any>> = new BehaviorSubject([]);
   public nItems: Array<any> = [];
-  private user: Object;
   public peerid: any;
   public anotherid: string;
-
   public peerconn: any;
   constructor(
     private db: AngularFireDatabase,
@@ -31,8 +27,8 @@ export class TaskListComponent implements OnInit {
 
     // Setup SW Toolbox - verbose.
     toolbox.options.debug = false;
-    toolbox.router.post('(.*)', toolbox.networkFirst);
-    toolbox.router.get('/tasklist(.*)', toolbox.networkFirst, {
+    toolbox.router.post('(.*)', toolbox.fastest);
+    toolbox.router.get('/tasklist(.*)', toolbox.fastest, {
       debug: false,
       networkTimeoutSeconds: 4,
       cache: {
@@ -43,7 +39,8 @@ export class TaskListComponent implements OnInit {
     });
 
     // Connect to the database and get a list of tasks
-    this.tasks = db.list('/tasks', { preserveSnapshot: true });
+    this.tasks = this.db.list('/tasks', { preserveSnapshot: true });
+
     // Do not close the connection! Subscribe to the connection and on each push update the user.
     this.tasks.subscribe(data => {
       this.nItems = [];
@@ -62,8 +59,10 @@ export class TaskListComponent implements OnInit {
 
   public ngOnInit() {
     this.peerservice.startPeer();
-    this.peerservice.getPeerId()
-      .subscribe(item => this.peerid = item);
+
+    this.peerservice.peerid.subscribe((id) => {
+      this.peerid = id;
+    });
   }
 
   // Skyux Modal with a form inside.

@@ -1,11 +1,6 @@
 import { NgModule } from '@angular/core';
 import { AngularFireModule } from 'angularfire2';
-import {
-  AngularFireDatabaseModule,
-  AngularFireDatabase,
-  FirebaseListObservable
-} from 'angularfire2/database';
-import { AngularFireAuthModule, AngularFireAuth } from 'angularfire2/auth';
+import { AngularFireDatabaseModule } from 'angularfire2/database';
 import { TasklistFormModalComponent } from './tasklist/tasklist-form.component';
 import { PeerService } from './shared/peer.service';
 /*
@@ -35,8 +30,7 @@ const environment = {
 @NgModule({
   imports: [
     AngularFireModule.initializeApp(environment.firebase),
-    AngularFireDatabaseModule,
-    AngularFireAuthModule
+    AngularFireDatabaseModule
   ],
   providers: [PeerService],
   entryComponents: [

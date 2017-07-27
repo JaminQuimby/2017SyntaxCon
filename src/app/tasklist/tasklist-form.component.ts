@@ -17,7 +17,9 @@ export class TasklistFormModalComponent implements OnInit {
     private peerservice: PeerService) { }
 
   public ngOnInit() {
-    this.peerservice.getPeerId()
-      .subscribe(item => this.peerid = item);
+    this.peerservice.peerid.subscribe((id) => {
+      this.peerid = id;
+    });
+
   }
 }

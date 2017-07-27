@@ -1,23 +1,18 @@
 {
   "extends": "./node_modules/@blackbaud/skyux-builder/tsconfig",
   "compilerOptions": {
-    "target": "es6",
     "module": "commonjs",
     "moduleResolution": "node",
-    "emitDecoratorMetadata": true,
-    "experimentalDecorators": true,
-    "lib": [
-      "dom",
-      "es6"
+    "typeRoots": [
+      "../node_modules/@types"
     ],
     "types": [
       "jasmine",
-      "node"
+      "node",
+      "firebase"
     ]
   },
   "exclude": [
     "node_modules"
-  ],
-  "compileOnSave": false,
-  "buildOnSave": false
+  ]
 }
