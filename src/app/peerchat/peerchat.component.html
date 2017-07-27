@@ -1,36 +1,6 @@
-<h1>Peer Chat</h1>
-
-<h1>My id - {{mypeerid}}</h1>
+<h1>ID: {{mypeerid}}</h1>
 <input type="text" [(ngModel)]="anotherid">
 <button (click)="connect()">Connect</button>
 	
 <button (click)="videoconnect()">VideoChat</button>
 <video #myvideo></video>
-
-<sky-list [data]="items" [defaultView]="grid">
-  <sky-list-toolbar>
-    <sky-list-secondary-actions>
-      <sky-list-column-selector-action [gridView]="grid">
-      </sky-list-column-selector-action>
-    </sky-list-secondary-actions>
-  </sky-list-toolbar>
-
-  <sky-list-view-grid fit="scroll" #grid>
-    <sky-grid-column
-      field="column1"
-      [locked]="true"
-      heading="Column1"
-      description="A numbered column">
-    </sky-grid-column>
-    <sky-grid-column
-      field="column2"
-      heading="Column2"
-      description="A fruit column">
-    </sky-grid-column>
-    <sky-grid-column
-      field="column3"
-      heading="Column3"
-      description="A sentence column">
-    </sky-grid-column>
-  </sky-list-view-grid>
-</sky-list>

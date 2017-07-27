@@ -1,40 +1,35 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2/database';
 import { Observable } from 'rxjs/Observable';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { SkyModalService, SkyModalCloseArgs } from '@blackbaud/skyux/dist/core';
 import { TaskListContext } from './tasklist.context';
+import { TasklistFormModalComponent } from './tasklist-form.component';
 import * as toolbox from 'sw-toolbox';
+import { PeerService } from '../shared/peer.service';
 
 @Component({
   selector: 'my-tasklist',
-  templateUrl: './tasklist.component.html'
+  templateUrl: './tasklist.component.html',
+  providers: [PeerService]
 })
 
-export class TaskListComponent {
+export class TaskListComponent implements OnInit {
 
   public tasks: FirebaseListObservable<any>;
   public items: BehaviorSubject<Array<any>> = new BehaviorSubject([]);
   public nItems: Array<any> = [];
   private user: Object;
+  public peerid: any;
+  public anotherid: string;
+
+  public peerconn: any;
   constructor(
     private db: AngularFireDatabase,
-    private modal: SkyModalService) {
+    private modal: SkyModalService,
+    private peerservice: PeerService) {
 
-    /*
-    this.af.auth.subscribe(user => {
-      if (user) {
-        // user logged in
-        this.user = user;
-      }
-      else {
-        // user not logged in
-        this.user = {};
-      }
-    });
-*/
     // Setup SW Toolbox - verbose.
-    
     toolbox.options.debug = false;
     toolbox.router.post('(.*)', toolbox.networkFirst);
     toolbox.router.get('/tasklist(.*)', toolbox.networkFirst, {
@@ -46,7 +41,7 @@ export class TaskListComponent {
         maxAgeSeconds: 200
       }
     });
-    
+
     // Connect to the database and get a list of tasks
     this.tasks = db.list('/tasks', { preserveSnapshot: true });
     // Do not close the connection! Subscribe to the connection and on each push update the user.
@@ -64,8 +59,16 @@ export class TaskListComponent {
       this.items.next(this.nItems.reverse());
     });
   }
-  // Skyux Modal with a form inside. 
+
+  public ngOnInit() {
+    this.peerservice.startPeer();
+    this.peerservice.getPeerId()
+      .subscribe(item => this.peerid = item);
+  }
+
+  // Skyux Modal with a form inside.
   public openModal(type: string) {
+
     let context = new TaskListContext();
     let windowMode: any = {
       'defaultModal': {
@@ -73,6 +76,14 @@ export class TaskListComponent {
       }
     };
     // Make a modal Instance
-
+    let modalInstance = this.modal.open(TasklistFormModalComponent, windowMode[type]);
+    modalInstance.closed.subscribe((result: SkyModalCloseArgs) => {
+      console.log('Modal closed with reason: ' + result.reason + ' and data: ' + result.data);
+      this.tasks.push({
+        'person': result.data.person || '',
+        'task': result.data.task || '',
+        'description': result.data.description || ''
+      });
+    });
   }
 }
