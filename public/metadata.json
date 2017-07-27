@@ -1,0 +1,18 @@
+[
+	{
+		"name": "polyfills.js",
+		"fallback": "SKY_PAGES_READY_POLYFILLS"
+	},
+	{
+		"name": "vendor.js",
+		"fallback": "SKY_PAGES_READY_VENDOR"
+	},
+	{
+		"name": "skyux.js",
+		"fallback": "SKY_PAGES_READY_SKYUX"
+	},
+	{
+		"name": "app.js",
+		"fallback": "SKY_PAGES_READY_APP"
+	}
+]
