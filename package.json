@@ -21,7 +21,7 @@
     "sw-toolbox": "^3.6.0"
   },
   "devDependencies": {
-    "@blackbaud/skyux-builder": "1.0.0-rc.12",
+    "@blackbaud/skyux-builder": "1.0.0-rc.13",
     "sw-precache": "^5.2.0"
   }
 }
