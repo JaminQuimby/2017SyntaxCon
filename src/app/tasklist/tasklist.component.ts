@@ -9,7 +9,8 @@ import { PeerService } from '../shared/peer.service';
 
 @Component({
   selector: 'my-tasklist',
-  templateUrl: './tasklist.component.html'
+  templateUrl: './tasklist.component.html',
+  styleUrls: ['tasklist.component.scss']
 })
 
 export class TaskListComponent implements OnInit {
