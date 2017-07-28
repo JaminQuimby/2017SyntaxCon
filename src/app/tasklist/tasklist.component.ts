@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, NgZone } from '@angular/core';
 import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2/database';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { SkyModalService, SkyModalCloseArgs } from '@blackbaud/skyux/dist/core';
@@ -23,7 +23,8 @@ export class TaskListComponent implements OnInit {
   constructor(
     private db: AngularFireDatabase,
     private modal: SkyModalService,
-    private peerservice: PeerService) {
+    private peerservice: PeerService,
+    private zone: NgZone) {
 
     // Setup SW Toolbox - verbose.
     toolbox.options.debug = false;
@@ -64,10 +65,13 @@ export class TaskListComponent implements OnInit {
       this.peerid = id;
     });
     this.peerservice.msg.subscribe((message) => {
-      let items = [];
-      items.push(message);
-      let nItems = this.nItems.reverse().concat(items);
-      this.items.next(nItems.reverse());
+      this.zone.run(() => {
+        let items = [];
+        items.push(message);
+        let nItems = this.nItems;
+        nItems = items.concat(nItems);
+        this.items.next(nItems);
+      });
 
     });
   }
