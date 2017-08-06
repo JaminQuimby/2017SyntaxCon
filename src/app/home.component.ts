@@ -1,26 +1,30 @@
 import { Component } from '@angular/core';
-// import { AngularFireDatabase, FirebaseListObservable} from 'angularfire2/database';
+import { AuthService } from './shared/auth.service';
 
 @Component({
   selector: 'my-home',
   templateUrl: './home.component.html'
 })
+
 export class HomeComponent {
+  public email: string;
+  public password: string;
+  public user: firebase.User;
 
-  constructor(
+  constructor(private authService: AuthService) {
 
-  ) {
-    /*
-    this.af.auth.subscribe(user => {
-      if(user) {
-        // user logged in
-        this.user = user;
-      }
-      else {
-        // user not logged in
-        this.user = {};
-      }
-    });
-    */
+    this.authService.user$.subscribe(
+      user => { this.user = user; }
+    );
+
+  }
+
+  public login() {
+    this.authService.login();
+    this.email = this.password = '';
+  }
+
+  public logout() {
+    this.authService.logout();
   }
 }

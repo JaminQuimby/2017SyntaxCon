@@ -1,28 +1,40 @@
-<h1>
-  Task List</h1>
-<sky-list [data]="items" [defaultView]="grid">
+<h1>Task List</h1>
+<sky-list [data]="taskView" [defaultView]="grid">
   <sky-list-toolbar>
+
     <sky-list-secondary-actions>
       <sky-list-column-selector-action [gridView]="grid">
       </sky-list-column-selector-action>
     </sky-list-secondary-actions>
-  </sky-list-toolbar>
-  <sky-toolbar>
-    <sky-toolbar-item>
-      <span class="sky-input-group-btn sky-input-group-clear">
-      <button class="sky-btn sky-btn-primary" (click)="openModal('defaultModal')" >Add Task</button>
-      <input type="text" [(ngModel)]="anotherid" class="sky-form-control">
-          <span class="sky-form-control" *ngIf="peerid">{{peerid}}</span>
-      </span>
 
-    </sky-toolbar-item>
-  </sky-toolbar>
+    <sky-list-toolbar-item id="custom-item2" location="center" index="1">
+      <ng-template><button class="sky-btn sky-btn-primary" (click)="openModal()">+</button></ng-template>
+    </sky-list-toolbar-item>
+
+  </sky-list-toolbar>
+
   <sky-list-view-grid fit="scroll" #grid>
-    <sky-grid-column field="person" heading="Person" description="A person">
-    </sky-grid-column>
-    <sky-grid-column field="task" heading="Task" description="A task">
-    </sky-grid-column>
-    <sky-grid-column field="description" heading="Description" description="A discription">
-    </sky-grid-column>
+    <sky-grid-column field="id" heading="" description="row id" hidden="true"></sky-grid-column>
+    <sky-grid-column field="composite" [template]="contextMenu"></sky-grid-column>
+    <sky-grid-column field="person" heading="Person" description="A person"></sky-grid-column>
+    <sky-grid-column field="task" heading="Task" description="A task"></sky-grid-column>
+    <sky-grid-column field="description" heading="Description" description="A discription"> </sky-grid-column>
   </sky-list-view-grid>
 </sky-list>
+
+<ng-template let-row="row" let-value="value" #contextMenu>
+
+  <sky-dropdown buttonType="context-menu">
+    <sky-dropdown-menu>
+      <sky-dropdown-item>
+        <button type="button" (click)="openModal(row)">
+            Edit 
+          </button>
+        <button type="button" (click)="remove(row.id)">
+            Remove 
+          </button>
+      </sky-dropdown-item>
+    </sky-dropdown-menu>
+  </sky-dropdown>
+
+</ng-template>

@@ -1,6 +1,45 @@
 {
   "rules": {
-    ".read": true,
-    ".write": true
+    ".read": false,
+    ".write": false,
+
+    "users": {
+      "$userId": {
+        
+        "profile": {
+          ".read": "(auth != null) && ($userId === auth.uid)",
+          ".write": "(auth != null) && ($userId === auth.uid)"
+        },
+
+        "organization" : {
+            ".read" : "(auth != null) && ($userId === auth.uid)",
+            ".write" : false  // <--- NOTE THIS
+        }
+        
+      }
+    },
+
+    "organizations": {
+      "$organization": {
+
+        "about": {
+          ".read": "root.child('users').child(auth.uid).child('organization').hasChildren([$organization])",
+          ".write": "root.child('users').child(auth.uid).child('organization').child($organization).child('role').val() === 5"
+        },
+
+        "tasks": {
+          ".read": "root.child('users').child(auth.uid).child('organization').hasChildren([$organization])",
+          ".write": "root.child('users').child(auth.uid).child('organization').child($organization).child('role').val() === 5"
+        },
+          
+        "staff": {
+          "$staffId": {
+            ".read": "root.child('users').child(auth.uid).child('organization').child($organization).child('role').val() === 5",
+            ".write": "root.child('users').child(auth.uid).child('organization').child($organization).child('role').val() === 5"
+          }
+        }
+
+      }
+    }
   }
 }

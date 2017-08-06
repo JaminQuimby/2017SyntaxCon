@@ -2,7 +2,9 @@ import { NgModule } from '@angular/core';
 import { AngularFireModule } from 'angularfire2';
 import { AngularFireDatabaseModule } from 'angularfire2/database';
 import { TasklistFormModalComponent } from './tasklist/tasklist-form.component';
-import { PeerService } from './shared/peer.service';
+import { AngularFireAuth } from 'angularfire2/auth';
+import { AuthService } from './shared/auth.service';
+
 /*
 import { SkyAppBootstrapper } from '@blackbaud/skyux-builder/runtime/bootstrapper';
 (SkyAppBootstrapper as any).processBootstrapConfig = () => {
@@ -32,7 +34,7 @@ const environment = {
     AngularFireModule.initializeApp(environment.firebase),
     AngularFireDatabaseModule
   ],
-  providers: [PeerService],
+  providers: [AuthService, AngularFireAuth],
   entryComponents: [
     TasklistFormModalComponent
   ]

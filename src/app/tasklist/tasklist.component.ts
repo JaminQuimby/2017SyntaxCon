@@ -1,11 +1,11 @@
-import { Component, OnInit, NgZone } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2/database';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { SkyModalService, SkyModalCloseArgs } from '@blackbaud/skyux/dist/core';
-import { TaskListContext } from './tasklist.context';
+import { TaskListModel } from './tasklist.model';
 import { TasklistFormModalComponent } from './tasklist-form.component';
 import * as toolbox from 'sw-toolbox';
-import { PeerService } from '../shared/peer.service';
+import { AuthService } from '../shared/auth.service';
 
 @Component({
   selector: 'my-tasklist',
@@ -14,18 +14,13 @@ import { PeerService } from '../shared/peer.service';
 })
 
 export class TaskListComponent implements OnInit {
+  public tasks: FirebaseListObservable<Array<firebase.database.DataSnapshot>>;
+  public taskView: BehaviorSubject<Array<TaskListModel>> = new BehaviorSubject([]);
 
-  public tasks: FirebaseListObservable<any>;
-  public items: BehaviorSubject<Array<any>> = new BehaviorSubject([]);
-  public nItems: Array<any> = [];
-  public peerid: any;
-  public anotherid: string;
-  public peerconn: any;
   constructor(
+    private auth: AuthService,
     private db: AngularFireDatabase,
-    private modal: SkyModalService,
-    private peerservice: PeerService,
-    private zone: NgZone) {
+    private modal: SkyModalService) {
 
     // Setup SW Toolbox - verbose.
     toolbox.options.debug = false;
@@ -40,61 +35,65 @@ export class TaskListComponent implements OnInit {
       }
     });
 
-    // Connect to the database and get a list of tasks
-    this.tasks = this.db.list('/tasks', { preserveSnapshot: true });
-
-    // Do not close the connection! Subscribe to the connection and on each push update the user.
-    this.tasks.subscribe(data => {
-      this.nItems = [];
-      data.forEach((x: any) => {
-        this.nItems.push({
-          'id': x.key,
-          'person': x.val().person,
-          'task': x.val().task,
-          'description': x.val().description
-        });
-
-      });
-      this.items.next(this.nItems.reverse());
-    });
   }
-
   public ngOnInit() {
-    this.peerservice.startPeer();
-
-    this.peerservice.peerid.subscribe((id) => {
-      this.peerid = id;
-    });
-    this.peerservice.msg.subscribe((message) => {
-      this.zone.run(() => {
-        let items = [];
-        items.push(message);
-        let nItems = this.nItems;
-        nItems = items.concat(nItems);
-        this.items.next(nItems);
-      });
-
-    });
+    this.auth.org$.subscribe(org => this.getTasksBy(org.id));
   }
 
   // Skyux Modal with a form inside.
-  public openModal(type: string) {
-
-    let context = new TaskListContext();
+  public openModal(task?: TaskListModel) {
+    let model = new TaskListModel();
+    if (task) { model = task; }
     let windowMode: any = {
       'defaultModal': {
-        'providers': [{ provide: TaskListContext, useValue: context }]
+        'providers': [{ provide: TaskListModel, useValue: model }]
       }
     };
     // Make a modal Instance
-    let modalInstance = this.modal.open(TasklistFormModalComponent, windowMode[type]);
+    let modalInstance = this.modal.open(TasklistFormModalComponent, windowMode['defaultModal']);
     modalInstance.closed.subscribe((result: SkyModalCloseArgs) => {
-      console.log('Modal closed with reason: ' + result.reason + ' and data: ' + result.data);
-      this.tasks.push({
-        'person': result.data.person || '',
-        'task': result.data.task || '',
-        'description': result.data.description || ''
-      });
+      this.save(Object.assign(new TaskListModel(), result.data));
     });
   }
+  protected remove(id: string) {
+    this.tasks.remove(id);
+  }
+  private save(task: TaskListModel) {
+    if (task.id) {
+      this.tasks.update(task.id, task);
+    } else {
+      this.tasks.push(task);
+    }
+  }
+
+  private updateView(tasks: Array<TaskListModel>, reverse?: boolean) {
+    if (reverse) {
+      this.taskView.next(tasks.reverse());
+    } else {
+      this.taskView.next(tasks);
+    }
+  }
+
+  private snapshotToArray(snapshot) {
+    // change the DatabaseSnapshot to array of TaskListModel.
+    let returnArray: Array<TaskListModel> = [];
+
+    snapshot.forEach((childSnapshot) => {
+      let item: TaskListModel = childSnapshot.val();
+      item.id = childSnapshot.key;
+      returnArray.push(item);
+    });
+    this.updateView(returnArray, true);
+
+  }
+
+  private getTasksBy(orgId) {
+    if (orgId) {
+      // Connect to the database and get a list of tasks
+      this.tasks = this.db.list('/organizations/' + orgId + '/tasks/', { preserveSnapshot: true });
+      // Do not close the connection! Subscribe to the connection and on each push update the user.
+      this.tasks.subscribe(data => this.snapshotToArray(data));
+    }
+  }
+
 }

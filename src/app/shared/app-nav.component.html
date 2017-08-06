@@ -1,11 +1,10 @@
-  <sky-navbar>
-    <sky-navbar-item *ngFor="let n of nav">
-      <a
-        [routerLink]="n.path"
-        [routerLinkActiveOptions]="{exact: true}"
-        routerLinkActive="sky-navbar-item-active"
-      >
+<sky-navbar>
+  <sky-navbar-item *ngFor="let n of nav">
+    <a [routerLink]="n.path" [routerLinkActiveOptions]="{exact: true}" routerLinkActive="sky-navbar-item-active">
         {{ n.name }}
       </a>
-    </sky-navbar-item>
-  </sky-navbar>
+  </sky-navbar-item>
+  <sky-navbar-item>
+    <sky-avatar [name]="userName" [src]="userPhoto"></sky-avatar>
+  </sky-navbar-item>
+</sky-navbar>
