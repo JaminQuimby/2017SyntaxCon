@@ -15,6 +15,14 @@ export class AppNavComponent {
       name: 'Home',
       path: '/'
     },
+     {
+      name: 'Dashboard',
+      path: '/dashboard'
+    },
+    {
+      name: 'Projects',
+      path: '/projects'
+    },
     {
       name: 'Task List',
       path: '/tasklist'

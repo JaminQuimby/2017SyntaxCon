@@ -7,7 +7,7 @@ import { TaskListModel } from './tasklist.model';
   templateUrl: './tasklist-form.component.html'
 })
 
-export class TasklistFormModalComponent {
+export class TasklistFormComponent {
 
   constructor(
     public model: TaskListModel,

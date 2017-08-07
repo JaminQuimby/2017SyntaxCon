@@ -11,12 +11,13 @@ export class HomeComponent {
   public password: string;
   public user: firebase.User;
 
-  constructor(private authService: AuthService) {
+  constructor(
+    private authService: AuthService
+  ) {
 
     this.authService.user$.subscribe(
       user => { this.user = user; }
     );
-
   }
 
   public login() {
@@ -27,4 +28,5 @@ export class HomeComponent {
   public logout() {
     this.authService.logout();
   }
+
 }

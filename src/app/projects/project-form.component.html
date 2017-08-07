@@ -1,0 +1,30 @@
+<sky-modal>
+  <sky-modal-header> project </sky-modal-header>
+  <sky-modal-content>
+    <div>
+      <label>
+      Project Name
+      <input type="text" [(ngModel)]="model.name" class="sky-form-control">
+    </label>
+    </div>
+
+    <div>
+      <label>
+      Description
+      <input type="text" [(ngModel)]="model.description" class="sky-form-control">
+    </label>
+    </div>
+
+  </sky-modal-content>
+  <sky-modal-footer>
+
+    <button type="button" class="sky-btn sky-btn-primary" (click)="instance.save(this.model)">
+     <span *ngIf="!model.id"> Add </span>
+     <span *ngIf="model.id"> Edit </span>
+    </button>
+
+    <button type="button" class="sky-btn sky-btn-default" (click)="instance.close()">
+      Close
+    </button>
+    </sky-modal-footer>
+</sky-modal>

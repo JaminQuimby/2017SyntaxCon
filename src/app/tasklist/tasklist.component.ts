@@ -3,7 +3,7 @@ import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2/databa
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { SkyModalService, SkyModalCloseArgs } from '@blackbaud/skyux/dist/core';
 import { TaskListModel } from './tasklist.model';
-import { TasklistFormModalComponent } from './tasklist-form.component';
+import { TasklistFormComponent } from './tasklist-form.component';
 import * as toolbox from 'sw-toolbox';
 import { AuthService } from '../shared/auth.service';
 
@@ -50,7 +50,7 @@ export class TaskListComponent implements OnInit {
       }
     };
     // Make a modal Instance
-    let modalInstance = this.modal.open(TasklistFormModalComponent, windowMode['defaultModal']);
+    let modalInstance = this.modal.open(TasklistFormComponent, windowMode['defaultModal']);
     modalInstance.closed.subscribe((result: SkyModalCloseArgs) => {
       this.save(Object.assign(new TaskListModel(), result.data));
     });

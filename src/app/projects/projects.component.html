@@ -1,0 +1,41 @@
+<h1>Project List</h1>
+
+<sky-list [data]="projectView" [defaultView]="grid">
+  <sky-list-toolbar>
+
+    <sky-list-secondary-actions>
+      <sky-list-column-selector-action [gridView]="grid">
+      </sky-list-column-selector-action>
+    </sky-list-secondary-actions>
+
+    <sky-list-toolbar-item id="custom-item2" location="center" index="1">
+      <ng-template><button class="sky-btn sky-btn-primary" (click)="openModal()">+</button></ng-template>
+    </sky-list-toolbar-item>
+
+  </sky-list-toolbar>
+
+  <sky-list-view-grid fit="scroll" #grid>
+    <sky-grid-column field="id" heading="" description="row id" hidden="true"></sky-grid-column>
+    <sky-grid-column field="composite" [template]="contextMenu"></sky-grid-column>
+
+    <sky-grid-column field="name" heading="Name" description="A project name"></sky-grid-column>
+    <sky-grid-column field="description" heading="Description" description="A discription"> </sky-grid-column>
+  </sky-list-view-grid>
+</sky-list>
+
+<ng-template let-row="row" let-value="value" #contextMenu>
+
+  <sky-dropdown buttonType="context-menu">
+    <sky-dropdown-menu>
+      <sky-dropdown-item>
+        <button type="button" (click)="openModal(row)">
+            Edit 
+          </button>
+        <button type="button" (click)="remove(row.id)">
+            Remove 
+          </button>
+      </sky-dropdown-item>
+    </sky-dropdown-menu>
+  </sky-dropdown>
+
+</ng-template>

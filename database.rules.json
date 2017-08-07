@@ -22,7 +22,7 @@
     "organizations": {
       "$organization": {
 
-        "about": {
+        "projects": {
           ".read": "root.child('users').child(auth.uid).child('organization').hasChildren([$organization])",
           ".write": "root.child('users').child(auth.uid).child('organization').child($organization).child('role').val() === 5"
         },
