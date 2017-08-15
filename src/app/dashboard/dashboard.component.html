@@ -1,6 +1,9 @@
 <sky-tile-dashboard>
-  <div *ngFor="let project of projects">
-  <dashboard-project-view projectName="{{project.name}}" projectId="id"></dashboard-project-view>
-  </div>
+  <table>
+    <tr *ngFor="let project of projects">
+      <td>
+          <dashboard-project-view projectName="{{project.name}}" projectId="id"></dashboard-project-view>
+      </td>
+    </tr>
+  </table>
 </sky-tile-dashboard>
-

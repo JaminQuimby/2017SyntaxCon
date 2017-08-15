@@ -1,14 +1,16 @@
-import { NgModule } from '@angular/core';
-import { AngularFireModule } from 'angularfire2';
-import { AngularFireDatabaseModule } from 'angularfire2/database';
-import { TasklistFormComponent } from './tasklist/tasklist-form.component';
-import { ProjectFormComponent } from './projects/project-form.component';
 import { AngularFireAuth } from 'angularfire2/auth';
+import { AngularFireDatabaseModule } from 'angularfire2/database';
+import { AngularFireModule } from 'angularfire2';
 import { AuthService } from './shared/auth.service';
-import { DragulaService, DragulaModule } from 'ng2-dragula/ng2-dragula';
-import { ProjectViewComponent } from './projects/project-view.component';
-import { ProjectsService } from './projects/projects.service';
 import { DashboardProjectViewComponent } from './dashboard/dashboard-project-view.component';
+import { DragulaService, DragulaModule } from 'ng2-dragula/ng2-dragula';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+
+import { NgModule } from '@angular/core';
+import { ProjectFormComponent } from './projects/project-form.component';
+import { ProjectsService } from './projects/projects.service';
+import { ProjectViewComponent } from './projects/project-view.component';
+import { TasklistFormComponent } from './tasklist/tasklist-form.component';
 /*
 import { SkyAppBootstrapper } from '@blackbaud/skyux-builder/runtime/bootstrapper';
 (SkyAppBootstrapper as any).processBootstrapConfig = () => {
@@ -37,7 +39,9 @@ const environment = {
     imports: [
         AngularFireModule.initializeApp(environment.firebase),
         AngularFireDatabaseModule,
-        DragulaModule
+        DragulaModule,
+        FormsModule,
+        ReactiveFormsModule
     ],
     exports: [DragulaModule],
     providers: [AuthService, AngularFireAuth, DragulaService, ProjectsService],
