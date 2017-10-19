@@ -18,11 +18,23 @@
 
     <div>
       <label>
-      Task
-      <input type="text" [(ngModel)]="model.task" class="sky-form-control">
+      Name
+      <input type="text" [(ngModel)]="model.name" class="sky-form-control">
     </label>
     </div>
-
+    <div>
+      <label>
+        Status
+        <select [(ngModel)]="model.status" >
+          <option>New</option>
+          <option>Ready</option>
+          <option>In Progress</option>
+          <option>Review</option>
+          <option>Done</option>
+          <option>Archived</option>
+        </select>
+      </label>
+    </div>
     <div>
       <label>
       Description

@@ -25,7 +25,7 @@ export class AppNavComponent {
     },
     {
       name: 'Task List',
-      path: '/tasklist'
+      path: '/tasks'
     }
   ];
   constructor(private auth: AuthService) {

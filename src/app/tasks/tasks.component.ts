@@ -2,20 +2,20 @@ import { Component, OnInit } from '@angular/core';
 import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2/database';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { SkyModalService, SkyModalCloseArgs } from '@blackbaud/skyux/dist/core';
-import { TaskListModel } from './tasklist.model';
-import { TasklistFormComponent } from './tasklist-form.component';
+import { TaskModel } from './task.model';
+import { TaskFormComponent } from './task-form.component';
 import * as toolbox from 'sw-toolbox';
 import { AuthService } from '../shared/auth.service';
 
 @Component({
-  selector: 'my-tasklist',
-  templateUrl: './tasklist.component.html',
-  styleUrls: ['tasklist.component.scss']
+  selector: 'uapi-tasks',
+  templateUrl: './tasks.component.html',
+  styleUrls: ['tasks.component.scss']
 })
 
-export class TaskListComponent implements OnInit {
+export class TaskComponent implements OnInit {
   public tasks: FirebaseListObservable<Array<firebase.database.DataSnapshot>>;
-  public taskView: BehaviorSubject<Array<TaskListModel>> = new BehaviorSubject([]);
+  public taskView: BehaviorSubject<Array<TaskModel>> = new BehaviorSubject([]);
 
   constructor(
     private auth: AuthService,
@@ -25,11 +25,11 @@ export class TaskListComponent implements OnInit {
     // Setup SW Toolbox - verbose.
     toolbox.options.debug = false;
     toolbox.router.post('(.*)', toolbox.fastest);
-    toolbox.router.get('/tasklist(.*)', toolbox.fastest, {
+    toolbox.router.get('/tasks(.*)', toolbox.fastest, {
       debug: false,
       networkTimeoutSeconds: 4,
       cache: {
-        name: 'tasklist-cache-v1',
+        name: 'task-cache-v1',
         maxEntries: 10,
         maxAgeSeconds: 200
       }
@@ -41,24 +41,24 @@ export class TaskListComponent implements OnInit {
   }
 
   // Skyux Modal with a form inside.
-  public openModal(task?: TaskListModel) {
-    let model = new TaskListModel();
+  public openModal(task?: TaskModel) {
+    let model = new TaskModel();
     if (task) { model = task; }
     let windowMode: any = {
       'defaultModal': {
-        'providers': [{ provide: TaskListModel, useValue: model }]
+        'providers': [{ provide: TaskModel, useValue: model }]
       }
     };
     // Make a modal Instance
-    let modalInstance = this.modal.open(TasklistFormComponent, windowMode['defaultModal']);
+    let modalInstance = this.modal.open(TaskFormComponent, windowMode['defaultModal']);
     modalInstance.closed.subscribe((result: SkyModalCloseArgs) => {
-      this.save(Object.assign(new TaskListModel(), result.data));
+      this.save(Object.assign(new TaskModel(), result.data));
     });
   }
   protected remove(id: string) {
     this.tasks.remove(id);
   }
-  private save(task: TaskListModel) {
+  private save(task: TaskModel) {
     if (task.id) {
       this.tasks.update(task.id, task);
     } else {
@@ -66,7 +66,7 @@ export class TaskListComponent implements OnInit {
     }
   }
 
-  private updateView(tasks: Array<TaskListModel>, reverse?: boolean) {
+  private updateView(tasks: Array<TaskModel>, reverse?: boolean) {
     if (reverse) {
       this.taskView.next(tasks.reverse());
     } else {
@@ -75,11 +75,11 @@ export class TaskListComponent implements OnInit {
   }
 
   private snapshotToArray(snapshot) {
-    // change the DatabaseSnapshot to array of TaskListModel.
-    let returnArray: Array<TaskListModel> = [];
+    // change the DatabaseSnapshot to array of TaskModel.
+    let returnArray: Array<TaskModel> = [];
 
     snapshot.forEach((childSnapshot) => {
-      let item: TaskListModel = childSnapshot.val();
+      let item: TaskModel = childSnapshot.val();
       item.id = childSnapshot.key;
       returnArray.push(item);
     });

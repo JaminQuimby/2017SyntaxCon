@@ -2,15 +2,15 @@ import { AngularFireAuth } from 'angularfire2/auth';
 import { AngularFireDatabaseModule } from 'angularfire2/database';
 import { AngularFireModule } from 'angularfire2';
 import { AuthService } from './shared/auth.service';
-import { DashboardProjectViewComponent } from './dashboard/dashboard-project-view.component';
+import { ProjectViewComponent } from './projects/project-view.component';
 import { DragulaService, DragulaModule } from 'ng2-dragula/ng2-dragula';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-
+import { WebStorageModule } from 'ngx-store';
 import { NgModule } from '@angular/core';
 import { ProjectFormComponent } from './projects/project-form.component';
 import { ProjectsService } from './projects/projects.service';
-import { ProjectViewComponent } from './projects/project-view.component';
-import { TasklistFormComponent } from './tasklist/tasklist-form.component';
+import { TaskFormComponent } from './tasks/task-form.component';
+import { TasksService } from './tasks/tasks.service';
 /*
 import { SkyAppBootstrapper } from '@blackbaud/skyux-builder/runtime/bootstrapper';
 (SkyAppBootstrapper as any).processBootstrapConfig = () => {
@@ -41,15 +41,15 @@ const environment = {
         AngularFireDatabaseModule,
         DragulaModule,
         FormsModule,
-        ReactiveFormsModule
+        ReactiveFormsModule,
+        WebStorageModule
     ],
     exports: [DragulaModule],
-    providers: [AuthService, AngularFireAuth, DragulaService, ProjectsService],
+    providers: [AuthService, AngularFireAuth, DragulaService, ProjectsService, TasksService],
     entryComponents: [
-        TasklistFormComponent,
+        TaskFormComponent,
         ProjectFormComponent,
-        ProjectViewComponent,
-        DashboardProjectViewComponent
+        ProjectViewComponent
     ]
 })
 export class AppExtrasModule { }

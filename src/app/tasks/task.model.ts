@@ -1,7 +1,8 @@
-export class TaskListModel {
+export class TaskModel {
   public id?: string;
   public projectId?: string;
-  public task: string;
+  public name: string;
+  public status: string;
   public person: string;
   public description: string;
 }
