@@ -1,5 +1,5 @@
 <h1>Task List</h1>
-<sky-list [data]="taskView" [defaultView]="grid">
+<sky-list [data]="service.task$" [defaultView]="grid">
   <sky-list-toolbar>
 
     <sky-list-secondary-actions>
@@ -30,7 +30,9 @@
     <sky-dropdown-menu>
       <sky-dropdown-item>
         <button type="button" (click)="openModal(row)">Edit</button>
-        <button type="button" (click)="remove(row.id)">Remove</button>
+      </sky-dropdown-item>
+      <sky-dropdown-item>
+        <button type="button" (click)="service.remove(row.id)">Remove</button>
       </sky-dropdown-item>
     </sky-dropdown-menu>
   </sky-dropdown>
