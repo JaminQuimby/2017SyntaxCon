@@ -1,2 +1,15 @@
 <app-nav></app-nav>
 <h1>The Progressive Web</h1>
+
+<h1 *ngIf="user">Welcome {{ user?.email }}!</h1>
+{{user}}
+<div *ngIf="!user?.uid">
+  <button (click)="login()" >
+    Login
+  </button>
+</div>
+
+<button (click)="logout()" *ngIf="user?.uid">
+  Logout
+</button>
+  

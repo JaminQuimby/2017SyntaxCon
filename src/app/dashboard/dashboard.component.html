@@ -1,0 +1,9 @@
+<sky-tile-dashboard>
+  <table>
+    <tr *ngFor="let project of projects">
+      <td>
+          <uapi-project-view projectName="{{project.name}}" projectId="id"></uapi-project-view>
+      </td>
+    </tr>
+  </table>
+</sky-tile-dashboard>

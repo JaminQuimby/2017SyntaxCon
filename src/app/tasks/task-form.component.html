@@ -1,0 +1,57 @@
+<sky-modal>
+  <sky-modal-header> Task </sky-modal-header>
+  <sky-modal-content>
+    <div>
+      <label>
+        Project <br/>
+        <select [(ngModel)]="model.projectId">   
+          <option  *ngFor="let project of this.projectView.getValue()" value="{{project.id}}">{{project.name}}</option>
+        </select>
+      </label>
+    </div>
+    <div>
+      <label>
+      Person
+      <input type="text" [(ngModel)]="model.person" class="sky-form-control">
+    </label>
+    </div>
+
+    <div>
+      <label>
+      Name
+      <input type="text" [(ngModel)]="model.name" class="sky-form-control">
+    </label>
+    </div>
+    <div>
+      <label>
+        Status
+        <select [(ngModel)]="model.status" >
+          <option>New</option>
+          <option>Ready</option>
+          <option>In Progress</option>
+          <option>Review</option>
+          <option>Done</option>
+          <option>Archived</option>
+        </select>
+      </label>
+    </div>
+    <div>
+      <label>
+      Description
+      <input type="text" [(ngModel)]="model.description" class="sky-form-control">
+    </label>
+    </div>
+
+  </sky-modal-content>
+  <sky-modal-footer>
+
+    <button type="button" class="sky-btn sky-btn-primary" (click)="instance.save(this.model)">
+     <span *ngIf="!model.id"> Add </span>
+     <span *ngIf="model.id"> Edit </span>
+    </button>
+
+    <button type="button" class="sky-btn sky-btn-default" (click)="instance.close()">
+      Close
+    </button>
+  </sky-modal-footer>
+</sky-modal>
