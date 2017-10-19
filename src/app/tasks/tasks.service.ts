@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2/database';
+import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/firestore';
 import { AuthService } from '../shared/auth.service';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { TaskModel } from './task.model';
@@ -8,11 +8,11 @@ import * as toolbox from 'sw-toolbox';
 @Injectable()
 export class TasksService {
     public task$: BehaviorSubject<Array<TaskModel>> = new BehaviorSubject(undefined);
-    public task: FirebaseListObservable<Array<firebase.database.DataSnapshot>>;
+    public taskCollection: AngularFirestoreCollection<TaskModel>;
 
     constructor(
         private auth: AuthService,
-        private db: AngularFireDatabase) {
+        private db: AngularFirestore) {
         this.auth.org$.subscribe(org => this.getTaskBy(org.id));
         this.tools();
     }
@@ -39,27 +39,19 @@ export class TasksService {
             this.task$.next(task);
         }
     }
-
-    private snapshotToArray(snapshot) {
-        // change the DatabaseSnapshot to array of TaskModel.
-        let returnArray: Array<TaskModel> = [];
-
-        snapshot.forEach((childSnapshot) => {
-            let item: TaskModel = childSnapshot.val();
-            item.id = childSnapshot.key;
-            returnArray.push(item);
-        });
-        this.updateView(returnArray, true);
-
-    }
-    private getTaskBy(orgId) {
+    
+    private getTaskBy(orgId: string) {
         if (orgId) {
             // Connect to the database and get a list of task
-            this.task =
-                this.db.list('/organizations/' + orgId + '/tasks/', { preserveSnapshot: true });
-            // Do not close the connection!
-            // Subscribe to the connection and on each push update the user.
-            this.task.subscribe(data => this.snapshotToArray(data));
+            this.taskCollection =
+                this.db.collection<TaskModel>('/organizations/' + orgId + '/tasks/');
+                this.taskCollection.snapshotChanges().map(actions => {
+                    return actions.map(action => {
+                        const data = action.payload.doc.data() as TaskModel;
+                        const id = action.payload.doc.id;
+                        return { id, ...data };
+                    });
+                }).subscribe(data => { this.updateView(data, true); });
         }
     }
 }

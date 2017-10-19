@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2/database';
+import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/firestore';
 import { AuthService } from '../shared/auth.service';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { ProjectModel } from './project.model';
@@ -7,12 +7,13 @@ import * as toolbox from 'sw-toolbox';
 
 @Injectable()
 export class ProjectsService {
+    public projectCollection: AngularFirestoreCollection<ProjectModel>;
     public projects$: BehaviorSubject<Array<ProjectModel>> = new BehaviorSubject(undefined);
-    public projects: FirebaseListObservable<Array<firebase.database.DataSnapshot>>;
+
 
     constructor(
         private auth: AuthService,
-        private db: AngularFireDatabase) {
+        private db: AngularFirestore) {
         this.auth.org$.subscribe(org => this.getprojectsBy(org.id));
         this.tools();
     }
@@ -40,26 +41,22 @@ export class ProjectsService {
         }
     }
 
-    private snapshotToArray(snapshot) {
-        // change the DatabaseSnapshot to array of ProjectModel.
-        let returnArray: Array<ProjectModel> = [];
+    private getprojectsBy(orgId: string) {
 
-        snapshot.forEach((childSnapshot) => {
-            let item: ProjectModel = childSnapshot.val();
-            item.id = childSnapshot.key;
-            returnArray.push(item);
-        });
-        this.updateView(returnArray, true);
-
-    }
-    private getprojectsBy(orgId) {
         if (orgId) {
             // Connect to the database and get a list of projects
-            this.projects =
-                this.db.list('/organizations/' + orgId + '/projects/', { preserveSnapshot: true });
+            this.projectCollection =
+                this.db.collection<ProjectModel>('/organizations/' + orgId + '/projects/');
             // Do not close the connection!
             // Subscribe to the connection and on each push update the user.
-            this.projects.subscribe(data => this.snapshotToArray(data));
+            this.projectCollection.snapshotChanges().map(actions => {
+                return actions.map(action => {
+                    const data = action.payload.doc.data() as ProjectModel;
+                    const id = action.payload.doc.id;
+                    return { id, ...data };
+                });
+            }).subscribe(data => { this.updateView(data, true); });
+
         }
     }
 }

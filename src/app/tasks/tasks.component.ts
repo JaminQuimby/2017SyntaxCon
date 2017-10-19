@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2/database';
+import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/firestore';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { SkyModalService, SkyModalCloseArgs } from '@blackbaud/skyux/dist/core';
 import { TaskModel } from './task.model';
@@ -14,12 +14,13 @@ import { AuthService } from '../shared/auth.service';
 })
 
 export class TaskComponent implements OnInit {
-  public tasks: FirebaseListObservable<Array<firebase.database.DataSnapshot>>;
+  // public tasks: AngularFireList<Array<firebase.database.DataSnapshot>>;
+  public tasksCollection: AngularFirestoreCollection<TaskModel>;
   public taskView: BehaviorSubject<Array<TaskModel>> = new BehaviorSubject([]);
 
   constructor(
     private auth: AuthService,
-    private db: AngularFireDatabase,
+    private db: AngularFirestore,
     private modal: SkyModalService) {
 
     // Setup SW Toolbox - verbose.
@@ -34,10 +35,24 @@ export class TaskComponent implements OnInit {
         maxAgeSeconds: 200
       }
     });
-
   }
+
   public ngOnInit() {
-    this.auth.org$.subscribe(org => this.getTasksBy(org.id));
+    this.auth.org$.subscribe(org => {
+      // setup database
+      this.tasksCollection = this.db.collection<TaskModel>('/organizations/' + org.id + '/tasks/');
+      // does not contain ids //  this.tasks$ = this.tasksCollection.valueChanges();
+
+      this.tasksCollection.snapshotChanges().map(actions => {
+        return actions.map(action => {
+          const data = action.payload.doc.data() as TaskModel;
+          const id = action.payload.doc.id;
+          return { id, ...data };
+        });
+      }).subscribe((data) => {
+        this.updateView(data, true);
+      });
+    });
   }
 
   // Skyux Modal with a form inside.
@@ -56,13 +71,13 @@ export class TaskComponent implements OnInit {
     });
   }
   protected remove(id: string) {
-    this.tasks.remove(id);
+    this.tasksCollection.doc(id).delete();
   }
   private save(task: TaskModel) {
     if (task.id) {
-      this.tasks.update(task.id, task);
+      this.tasksCollection.doc(task.id).update(Object.assign({}, task));
     } else {
-      this.tasks.push(task);
+      this.tasksCollection.add(Object.assign({}, task));
     }
   }
 
@@ -71,28 +86,6 @@ export class TaskComponent implements OnInit {
       this.taskView.next(tasks.reverse());
     } else {
       this.taskView.next(tasks);
-    }
-  }
-
-  private snapshotToArray(snapshot) {
-    // change the DatabaseSnapshot to array of TaskModel.
-    let returnArray: Array<TaskModel> = [];
-
-    snapshot.forEach((childSnapshot) => {
-      let item: TaskModel = childSnapshot.val();
-      item.id = childSnapshot.key;
-      returnArray.push(item);
-    });
-    this.updateView(returnArray, true);
-
-  }
-
-  private getTasksBy(orgId) {
-    if (orgId) {
-      // Connect to the database and get a list of tasks
-      this.tasks = this.db.list('/organizations/' + orgId + '/tasks/', { preserveSnapshot: true });
-      // Do not close the connection! Subscribe to the connection and on each push update the user.
-      this.tasks.subscribe(data => this.snapshotToArray(data));
     }
   }
 

@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { AngularFireAuth } from 'angularfire2/auth';
+import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/firestore';
 import * as firebase from 'firebase/app';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Observable } from 'rxjs/Observable';
-import { AngularFireDatabase } from 'angularfire2/database';
 import { OrganizationModel } from './organization.model';
 
 @Injectable()
@@ -12,9 +12,11 @@ export class AuthService {
     public user$: BehaviorSubject<any> = new BehaviorSubject({});
     public org$: BehaviorSubject<any> = new BehaviorSubject({});
 
+    public orgCollection: AngularFirestoreCollection<any>;
+
     constructor(
         private firebaseAuth: AngularFireAuth,
-        private db: AngularFireDatabase
+        private db: AngularFirestore
     ) {
         this.user = firebaseAuth.authState;
         this.user.subscribe(user => {
@@ -41,15 +43,15 @@ export class AuthService {
 
     private lookupOrgBy(userUid: string) {
         // database
-        this.db.list('/users/' + userUid + '/organization', { preserveSnapshot: true })
-            .subscribe(list => {
-                list.forEach((organization: firebase.database.DataSnapshot) => {
-                    const org: OrganizationModel = Object.assign(
-                        { 'id': organization.key }, organization.val()
-                    );
-                    this.org$.next(org);
-                });
-            });
-    }
+        this.orgCollection = this.db.collection('/users/' + userUid + '/organization');
+        // does not contain ids //  this.tasks$ = this.tasksCollection.valueChanges();
 
+        this.orgCollection.snapshotChanges().map(actions => {
+            return actions.map(action => {
+                const data = action.payload.doc.data() as OrganizationModel;
+                const id = action.payload.doc.id;
+                return { id, ...data };
+            });
+        }).subscribe(org => { this.org$.next(org[0]); });
+    }
 }

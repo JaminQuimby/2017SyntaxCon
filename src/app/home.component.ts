@@ -9,7 +9,7 @@ import { AuthService } from './shared/auth.service';
 export class HomeComponent {
   public email: string;
   public password: string;
-  public user: firebase.User;
+  public user: any;
 
   constructor(
     private authService: AuthService

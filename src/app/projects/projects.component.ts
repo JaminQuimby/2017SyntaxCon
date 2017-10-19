@@ -42,14 +42,13 @@ export class ProjectComponent implements OnInit {
     });
   }
   protected remove(id: string) {
-    this.service.projects.remove(id);
+    this.service.projectCollection.doc(id).delete();
   }
   private save(project: ProjectModel) {
     if (project.id) {
-      this.service.projects.update(project.id, project);
+      this.service.projectCollection.doc(project.id).update(Object.assign({}, project));
     } else {
-      this.service.projects.push(project);
+      this.service.projectCollection.add(Object.assign({}, project));
     }
   }
-
 }

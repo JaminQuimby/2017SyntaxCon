@@ -1,5 +1,6 @@
 import { AngularFireAuth } from 'angularfire2/auth';
 import { AngularFireDatabaseModule } from 'angularfire2/database';
+import { AngularFirestoreModule } from 'angularfire2/firestore';
 import { AngularFireModule } from 'angularfire2';
 import { AuthService } from './shared/auth.service';
 import { ProjectViewComponent } from './projects/project-view.component';
@@ -39,6 +40,7 @@ const environment = {
     imports: [
         AngularFireModule.initializeApp(environment.firebase),
         AngularFireDatabaseModule,
+        AngularFirestoreModule,
         DragulaModule,
         FormsModule,
         ReactiveFormsModule,

@@ -6,8 +6,7 @@ import { ProjectModel } from '../projects/project.model';
 
 @Component({
     selector: 'uapi-dashboard',
-    templateUrl: './dashboard.component.html',
-    styleUrls: ['dashboard.component.scss']
+    templateUrl: './dashboard.component.html'
 })
 export class DashboardComponent {
     public projects: Array<ProjectModel> = [];
