@@ -15,7 +15,9 @@ export class TasksService {
     private auth: AuthService,
     private db: AngularFirestore) {
     this.auth.org$.subscribe((org: OrganizationModel) => {
-      this.tasksCollection = this.db.collection<TaskModel>('/organizations/' + org.id + '/tasks/');
+      let collectionUrl = `/organizations/${org.id}/tasks/`;
+
+      this.tasksCollection = this.db.collection<TaskModel>(collectionUrl);
       this.tasksCollection.snapshotChanges().map(actions => {
         return actions.map(action => {
           const data = action.payload.doc.data() as TaskModel;
@@ -26,7 +28,23 @@ export class TasksService {
         this.task$.next(data);
         this.updateView(data, true);
       });
+
+      // Test Offline Mode.
+      /*
+      this.db.firestore.collection(collectionUrl)
+        .onSnapshot({ includeQueryMetadataChanges: true }, function (snapshot) {
+          snapshot.docChanges.forEach(function (change) {
+            if (change.type === 'added') {
+
+            }
+            let source = snapshot.metadata.fromCache ? 'local cache' : 'server';
+            console.log('Data came from ' + source);
+          });
+        });
+        */
+
     });
+
     this.tools();
   }
 
@@ -45,7 +63,7 @@ export class TasksService {
     // Setup SW Toolbox - verbose.
     toolbox.options.debug = false;
     toolbox.router.post('(.*)', toolbox.fastest);
-    toolbox.router.get('/tasks(.*)', toolbox.fastest, {
+    toolbox.router.get('/tasklist(.*)', toolbox.fastest, {
       debug: false,
       networkTimeoutSeconds: 4,
       cache: {
