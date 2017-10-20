@@ -25,8 +25,9 @@ export class TasksService {
             return { id, ...data };
           });
         }).subscribe((data) => {
-          this.task$.next(data);
-          this.updateView(data);
+          if (data.length > 0) {
+            this.updateView(data);
+          }
         });
     });
   }

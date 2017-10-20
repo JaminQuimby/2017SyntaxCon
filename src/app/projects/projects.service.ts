@@ -25,8 +25,9 @@ export class ProjectsService {
             return { id, ...data };
           });
         }).subscribe((data) => {
-          this.projects$.next(data);
-          this.updateView(data);
+          if (data.length > 0) {
+            this.updateView(data);
+          }
         });
     });
   }
@@ -43,7 +44,7 @@ export class ProjectsService {
     this.projectCollection.doc(id).delete();
   }
 
-  private updateView(projects: Array<ProjectModel>, reverse?: boolean) {
+  private updateView(projects: Array<ProjectModel>) {
     this.projects$.next(projects.reverse());
   }
 }

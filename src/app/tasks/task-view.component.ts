@@ -2,8 +2,7 @@ import { Component, Input } from '@angular/core';
 
 @Component({
     selector: 'uapi-task-view',
-    templateUrl: './task-view.component.html',
-    styleUrls: ['./task-view.component.scss']
+    templateUrl: './task-view.component.html'
 })
 export class TaskViewComponent {
     @Input()

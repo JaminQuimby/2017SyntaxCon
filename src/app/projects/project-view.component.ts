@@ -2,6 +2,8 @@ import { Component, Input } from '@angular/core';
 import { DragulaService } from 'ng2-dragula';
 import { TasksService } from '../tasks/tasks.service';
 import { TaskModel } from '../tasks/task.model';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+
 @Component({
     selector: 'uapi-project-view',
     templateUrl: './project-view.component.html',
@@ -9,19 +11,20 @@ import { TaskModel } from '../tasks/task.model';
     viewProviders: [DragulaService]
 })
 export class ProjectViewComponent {
-    public static columns = ['New', 'Ready', 'In Progress', 'Review', 'Done', 'Archived'];
+    public readonly columns: Array<string> = ['New', 'Ready', 'In Progress', 'Review', 'Done', 'Archived'];
     @Input()
     public projectId: string;
     @Input()
     public projectName: string;
 
-    public tasks: Array<TaskModel> = [];
+    public tasks: BehaviorSubject<Array<TaskModel>> =
+    new BehaviorSubject(new Array(new TaskModel));
 
     constructor(
         private dragulaService: DragulaService,
         private service: TasksService) {
         this.service.task$.subscribe(tasks => {
-            this.tasks = tasks;
+            this.tasks.next(tasks);
         });
 
         this.dragulaService.drag.subscribe((value: any) => {
