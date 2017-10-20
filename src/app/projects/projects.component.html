@@ -1,6 +1,5 @@
 <h1>Project List</h1>
-
-<sky-list [data]="projectView" [defaultView]="grid">
+<sky-list [data]="service.projects$" [defaultView]="grid">
   <sky-list-toolbar>
 
     <sky-list-secondary-actions>
@@ -31,7 +30,7 @@
         <button type="button" (click)="openModal(row)">
             Edit 
           </button>
-        <button type="button" (click)="remove(row.id)">
+        <button type="button" (click)="service.remove(row.id)">
             Remove 
           </button>
       </sky-dropdown-item>

@@ -9,8 +9,8 @@ import { OrganizationModel } from './organization.model';
 @Injectable()
 export class AuthService {
   private user: Observable<firebase.User>;
-  public user$: BehaviorSubject<any> = new BehaviorSubject({});
-  public org$: BehaviorSubject<any> = new BehaviorSubject({});
+  public user$: BehaviorSubject<any> = new BehaviorSubject([]);
+  public org$: BehaviorSubject<any> = new BehaviorSubject([]);
 
   public orgCollection: AngularFirestoreCollection<any>;
 

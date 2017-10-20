@@ -1,5 +1,4 @@
-import { Component, OnInit } from '@angular/core';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { Component } from '@angular/core';
 import { SkyModalService, SkyModalCloseArgs } from '@blackbaud/skyux/dist/core';
 import { ProjectModel } from './project.model';
 import { ProjectFormComponent } from './project-form.component';
@@ -11,20 +10,10 @@ import { ProjectsService } from './projects.service';
   styleUrls: ['projects.component.scss']
 })
 
-export class ProjectComponent implements OnInit {
-
-  public projectView: BehaviorSubject<Array<ProjectModel>> = new BehaviorSubject([]);
-
+export class ProjectComponent {
   constructor(
     private service: ProjectsService,
     private modal: SkyModalService) { }
-
-  public ngOnInit() {
-    this.service.projects$.subscribe(projects => {
-      if (projects) { this.projectView.next(projects); }
-    });
-
-  }
 
   // Skyux Modal with a form inside.
   public openModal(project?: ProjectModel) {
@@ -36,19 +25,10 @@ export class ProjectComponent implements OnInit {
       }
     };
     // Make a modal Instance
-    let modalInstance = this.modal.open(ProjectFormComponent, windowMode['defaultModal']);
-    modalInstance.closed.subscribe((result: SkyModalCloseArgs) => {
-      this.save(Object.assign(new ProjectModel(), result.data));
-    });
-  }
-  protected remove(id: string) {
-    this.service.projectCollection.doc(id).delete();
-  }
-  private save(project: ProjectModel) {
-    if (project.id) {
-      this.service.projectCollection.doc(project.id).update(Object.assign({}, project));
-    } else {
-      this.service.projectCollection.add(Object.assign({}, project));
-    }
+    this.modal
+      .open(ProjectFormComponent, windowMode['defaultModal'])
+      .closed.subscribe((result: SkyModalCloseArgs) => {
+        this.service.save(Object.assign(new ProjectModel(), result.data));
+      });
   }
 }

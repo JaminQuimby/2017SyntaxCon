@@ -3,6 +3,7 @@ import { SkyModalService, SkyModalCloseArgs } from '@blackbaud/skyux/dist/core';
 import { TaskModel } from './task.model';
 import { TaskFormComponent } from './task-form.component';
 import { TasksService } from './tasks.service';
+
 @Component({
   selector: 'uapi-tasks',
   templateUrl: './tasks.component.html',
@@ -30,5 +31,4 @@ export class TaskComponent {
         this.service.save(Object.assign(new TaskModel(), result.data));
       });
   }
-
 }
