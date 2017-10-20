@@ -1,3 +1,4 @@
+
 import { Component } from '@angular/core';
 import { SkyModalService, SkyModalCloseArgs } from '@blackbaud/skyux/dist/core';
 import { TaskModel } from './task.model';
@@ -6,8 +7,7 @@ import { TasksService } from './tasks.service';
 
 @Component({
   selector: 'uapi-tasks',
-  templateUrl: './tasks.component.html',
-  styleUrls: ['tasks.component.scss']
+  templateUrl: './tasks.component.html'
 })
 
 export class TaskComponent {
