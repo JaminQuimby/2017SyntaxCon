@@ -16,10 +16,9 @@
                     <tbody>
                         <tr>
                             <td [dragula]='"first-bag"' *ngFor="let column of columns">
-                                {{column}}
                                 <div *ngFor="let task of tasks | async">
                                     <uapi-task-view 
-                                    *ngIf="task.status==column" 
+                                    *ngIf="task.status==column && task.projectId==projectId" 
                                     [taskId]="task.name">
                                     </uapi-task-view>
                                 </div>

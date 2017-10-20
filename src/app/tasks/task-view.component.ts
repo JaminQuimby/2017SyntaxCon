@@ -8,7 +8,7 @@ export class TaskViewComponent {
     @Input()
     public taskId: string;
     constructor() {
-        console.log(this.taskId);
+       // console.log(this.taskId);
     }
 
 }

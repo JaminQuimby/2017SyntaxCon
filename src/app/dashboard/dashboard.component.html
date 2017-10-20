@@ -2,7 +2,7 @@
   <table>
     <tr *ngFor="let project of projects">
       <td>
-          <uapi-project-view projectName="{{project.name}}" projectId="id"></uapi-project-view>
+          <uapi-project-view projectName="{{project.name}}" projectId="{{project.id}}"></uapi-project-view>
       </td>
     </tr>
   </table>

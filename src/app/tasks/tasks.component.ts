@@ -28,7 +28,9 @@ export class TaskComponent {
     this.modal
       .open(TaskFormComponent, windowMode['defaultModal'])
       .closed.subscribe((result: SkyModalCloseArgs) => {
-        this.service.save(Object.assign(new TaskModel(), result.data));
+        if (result.reason === 'save') {
+          this.service.save(Object.assign(new TaskModel(), result.data));
+        }
       });
   }
 }

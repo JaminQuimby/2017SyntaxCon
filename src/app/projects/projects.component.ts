@@ -28,7 +28,9 @@ export class ProjectComponent {
     this.modal
       .open(ProjectFormComponent, windowMode['defaultModal'])
       .closed.subscribe((result: SkyModalCloseArgs) => {
-        this.service.save(Object.assign(new ProjectModel(), result.data));
+        if (result.reason === 'save') {
+          this.service.save(Object.assign(new ProjectModel(), result.data));
+        }
       });
   }
 }
