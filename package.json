@@ -15,7 +15,7 @@
   "author": "Jamin Quimby",
   "dependencies": {
     "@blackbaud/skyux": "2.3.0",
-    "@types/google-drive-realtime-api": "0.0.33",
+    "@types/socket.io-client": "^1.4.31",
     "angularfire2": "5.0.0-rc.3",
     "dragula": "^3.7.2",
     "firebase": "^4.5.2",
