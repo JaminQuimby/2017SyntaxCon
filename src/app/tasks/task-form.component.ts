@@ -16,8 +16,8 @@ export class TaskFormComponent {
     public model: TaskModel,
     public instance: SkyModalInstance,
     private projects: ProjectsService) {
-    this.projects.projects$.subscribe(projects => {
-      if (projects) { this.projectView.next(projects); }
+    this.projects.projects$.subscribe(project => {
+      if (project) { this.projectView.next(project); }
     });
   }
 }
