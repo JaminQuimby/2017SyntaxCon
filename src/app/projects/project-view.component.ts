@@ -9,7 +9,7 @@ import { TaskModel } from '../tasks/task.model';
     viewProviders: [DragulaService]
 })
 export class ProjectViewComponent {
-    public static columns = ['New', 'Ready', 'In Progress', 'Review', 'Done', 'Archived'];
+    public readonly columns: Array<string> = ['New', 'Ready', 'In Progress', 'Review', 'Done', 'Archived'];
     @Input()
     public projectId: string;
     @Input()
