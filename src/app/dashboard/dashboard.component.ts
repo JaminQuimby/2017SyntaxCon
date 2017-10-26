@@ -4,12 +4,12 @@ import { ProjectsService } from '../projects/projects.service';
 import { ProjectModel } from '../projects/project.model';
 
 @Component({
-    selector: 'uapi-dashboard',
-    templateUrl: './dashboard.component.html'
+  selector: 'uapi-dashboard',
+  templateUrl: './dashboard.component.html'
 })
 export class DashboardComponent {
-    public projects: Array<ProjectModel> = [];
-    public dashboardConfig: SkyTileDashboardConfig;
+  public projects: Array<ProjectModel> = [];
+  public dashboardConfig: SkyTileDashboardConfig;
 
     constructor(private service: ProjectsService) {
         this.service.projects$.subscribe(projects => {
