@@ -41,6 +41,15 @@ export class TasksService {
     }
   }
 
+  public update(id: string, ...data: any[]) {
+    let change: TaskModel = this.task$.getValue().find(task => task.id === id);
+    data.forEach((item) => {
+      Object.assign(change, item);
+    });
+    console.log(change);
+    this.save(change);
+  }
+
   public remove(id: string) {
     this.tasksCollection.doc(id).delete();
   }

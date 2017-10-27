@@ -34,6 +34,10 @@ export class ProjectViewComponent {
     this.dragulaService.drop.subscribe((value: any) => {
       // console.log(`drop: ${value[0]}`);
       this.onDrop(value.slice(1));
+      let [projectId, element] = value;
+      let status = element.parentElement.dataset.column;
+      let taskid = element.dataset.taskId;
+      this.service.update(taskid, { 'status': status }, {'projectId': projectId});
     });
     this.dragulaService.over.subscribe((value: any) => {
       // console.log(`over: ${value[0]}`);

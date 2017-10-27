@@ -1,32 +1,30 @@
 <sky-tile>
-    <sky-tile-title>
-        {{projectName}}
-    </sky-tile-title>
-    <sky-tile-content>
-        <sky-tile-content-section>
-            <div style="display:flex; overflow:scroll;">
-                <table>
-                    <thead>
-                        <tr>
-                            <td *ngFor="let column of columns">
-                                <h3>{{column}}</h3>
-                            </td>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td [dragula]='projectId' *ngFor="let column of columns">
-                                <div *ngFor="let task of tasks | async">
-                                    <uapi-task-view 
-                                    *ngIf="task.status==column && task.projectId==projectId" 
-                                    [task]="task">
-                                    </uapi-task-view>
-                                </div>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </sky-tile-content-section>
-    </sky-tile-content>
+  <sky-tile-title>
+    {{projectName}}
+  </sky-tile-title>
+  <sky-tile-content>
+    <sky-tile-content-section>
+      <div style="display:flex; overflow:scroll;">
+        <table>
+          <thead>
+            <tr>
+              <td *ngFor="let column of columns">
+                <h3>{{column}}</h3>
+              </td>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td [dragula]='projectId' *ngFor="let column of columns" [attr.data-column]="column">
+                <div *ngFor="let task of tasks | async" [attr.data-task-id]="task.id">
+                  <uapi-task-view *ngIf="task.status==column && task.projectId==projectId" [task]="task">
+                  </uapi-task-view>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </sky-tile-content-section>
+  </sky-tile-content>
 </sky-tile>
