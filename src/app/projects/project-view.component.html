@@ -19,7 +19,7 @@
                                 <div *ngFor="let task of tasks | async">
                                     <uapi-task-view 
                                     *ngIf="task.status==column && task.projectId==projectId" 
-                                    [taskId]="task.name">
+                                    [task]="task">
                                     </uapi-task-view>
                                 </div>
                             </td>

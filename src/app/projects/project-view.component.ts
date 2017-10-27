@@ -11,21 +11,21 @@ import { BehaviorSubject } from 'rxjs/BehaviorSubject';
   viewProviders: [DragulaService]
 })
 export class ProjectViewComponent {
-    public readonly columns: Array<string> = ['New', 'Ready', 'In Progress', 'Review', 'Done', 'Archived'];
-    @Input()
-    public projectId: string;
-    @Input()
-    public projectName: string;
+  public readonly columns: Array<string> = ['New', 'Ready', 'In Progress', 'Review', 'Done', 'Archived'];
+  @Input()
+  public projectId: string;
+  @Input()
+  public projectName: string;
 
-    public tasks: BehaviorSubject<Array<TaskModel>> =
-    new BehaviorSubject(new Array(new TaskModel));
+  public tasks: BehaviorSubject<Array<TaskModel>> =
+  new BehaviorSubject(new Array(new TaskModel));
 
-    constructor(
-        private dragulaService: DragulaService,
-        private service: TasksService) {
-        this.service.task$.subscribe(tasks => {
-            this.tasks.next(tasks);
-        });
+  constructor(
+    private dragulaService: DragulaService,
+    private service: TasksService) {
+    this.service.task$.subscribe(tasks => {
+      if (tasks.length >= 1) { this.tasks.next(tasks); }
+    });
 
     this.dragulaService.drag.subscribe((value: any) => {
       // console.log(`drag: ${value[0]}`); // value[0] will always be bag name
