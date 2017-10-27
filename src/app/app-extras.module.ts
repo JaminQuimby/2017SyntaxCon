@@ -1,4 +1,3 @@
-import '../../node_modules/dragula/dist/dragula.css';
 import { AngularFireAuth } from 'angularfire2/auth';
 import { AngularFireDatabaseModule } from 'angularfire2/database';
 import { AngularFirestoreModule } from 'angularfire2/firestore';
