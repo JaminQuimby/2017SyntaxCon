@@ -46,7 +46,6 @@ export class TasksService {
     data.forEach((item) => {
       Object.assign(change, item);
     });
-    console.log(change);
     this.save(change);
   }
 
