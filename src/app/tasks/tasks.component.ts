@@ -12,7 +12,7 @@ import { TasksService } from './tasks.service';
 
 export class TaskComponent {
   constructor(
-    private service: TasksService,
+    public service: TasksService,
     private modal: SkyModalService) { }
 
   // Skyux Modal with a form inside.
