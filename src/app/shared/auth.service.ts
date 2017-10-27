@@ -21,7 +21,7 @@ export class AuthService {
     firebase.firestore().enablePersistence()
       .then(function () {
         // Initialize Cloud Firestore through firebase
-        let db = firebase.firestore();
+        firebase.firestore();
       })
       .catch(function (err) {
         if (err.code === 'failed-precondition') {
