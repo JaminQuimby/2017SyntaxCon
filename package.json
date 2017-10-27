@@ -13,12 +13,13 @@
   },
   "keywords": [],
   "author": "Jamin Quimby",
+  "license": "ISC",
   "dependencies": {
     "@blackbaud/skyux": "2.3.0",
     "angularfire2": "5.0.0-rc.3",
-    "dragula": "^3.7.2",
+    "dragula": "3.7.2",
     "firebase": "^4.5.2",
-    "ng2-dragula": "^1.5.0",
+    "ng2-dragula": "1.3.1",
     "ngx-store": "^1.1.10",
     "promise-polyfill": "6.0.2",
     "sw-toolbox": "^3.6.0"

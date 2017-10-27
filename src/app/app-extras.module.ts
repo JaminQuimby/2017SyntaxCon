@@ -48,7 +48,7 @@ const environment = {
         ReactiveFormsModule,
         WebStorageModule
     ],
-
+    exports: [DragulaModule],
     providers: [AuthService, AngularFireAuth, DragulaService, ProjectsService, TasksService],
     entryComponents: [
         TaskFormComponent,

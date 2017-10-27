@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { DragulaService } from 'ng2-dragula';
+import { DragulaService } from 'ng2-dragula/ng2-dragula';
 import { TasksService } from '../tasks/tasks.service';
 import { TaskModel } from '../tasks/task.model';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
