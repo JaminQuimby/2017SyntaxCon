@@ -5,8 +5,14 @@
     "allowJs": true,
     "module": "commonjs",
     "moduleResolution": "node",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
     "typeRoots": [
       "../node_modules/@types"
+    ],
+    "lib": [
+      "dom",
+      "es6"
     ],
     "types": [
       "jasmine",
@@ -17,5 +23,8 @@
   },
   "exclude": [
     "node_modules"
-  ]
+  ],
+  "compileOnSave": false,
+  "buildOnSave": false,
+  "sourceMap": true
 }
