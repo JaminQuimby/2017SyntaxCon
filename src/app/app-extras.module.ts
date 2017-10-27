@@ -1,3 +1,4 @@
+import '../../node_modules/dragula/dist/dragula.css';
 import { AngularFireAuth } from 'angularfire2/auth';
 import { AngularFireDatabaseModule } from 'angularfire2/database';
 import { AngularFirestoreModule } from 'angularfire2/firestore';
@@ -12,6 +13,7 @@ import { ProjectFormComponent } from './projects/project-form.component';
 import { ProjectsService } from './projects/projects.service';
 import { TaskFormComponent } from './tasks/task-form.component';
 import { TasksService } from './tasks/tasks.service';
+
 /*
 import { SkyAppBootstrapper } from '@blackbaud/skyux-builder/runtime/bootstrapper';
 (SkyAppBootstrapper as any).processBootstrapConfig = () => {
@@ -46,7 +48,7 @@ const environment = {
         ReactiveFormsModule,
         WebStorageModule
     ],
-    exports: [DragulaModule],
+
     providers: [AuthService, AngularFireAuth, DragulaService, ProjectsService, TasksService],
     entryComponents: [
         TaskFormComponent,

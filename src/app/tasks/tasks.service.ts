@@ -4,7 +4,6 @@ import { AuthService } from '../shared/auth.service';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { TaskModel } from './task.model';
 import { OrganizationModel } from '../shared/organization.model';
-// import * as io from 'socket.io-client';
 
 @Injectable()
 export class TasksService {

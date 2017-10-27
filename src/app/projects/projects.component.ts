@@ -12,7 +12,7 @@ import { ProjectsService } from './projects.service';
 
 export class ProjectComponent {
   constructor(
-    private service: ProjectsService,
+    public service: ProjectsService,
     private modal: SkyModalService) { }
 
   // Skyux Modal with a form inside.

@@ -11,8 +11,7 @@
     "types": [
       "jasmine",
       "node",
-      "firebase",
-      "google-drive-realtime-api"
+      "firebase"
     ]
   },
   "exclude": [

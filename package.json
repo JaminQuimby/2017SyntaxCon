@@ -25,7 +25,6 @@
   },
   "devDependencies": {
     "@blackbaud/skyux-builder": "1.3.0",
-    "sw-precache": "^5.2.0",
-    "@types/google-drive-realtime-api": "0.0.33"
+    "sw-precache": "^5.2.0"
   }
 }
