@@ -1,7 +1,7 @@
 @import '../../assets/styles/dragula.css';
 table {
     width: 100%;
-    border-spacing: 4px;
+    border-spacing: 4px 0px;
     border-collapse: separate;
 }
 td {
@@ -22,4 +22,27 @@ h3 {
 /deep/ .sky-page-summary{
             box-shadow: 2px 2px 4px #cbc9c9;
         margin: 1px;
+}
+
+.column{
+    border-top-style: solid;
+    border-top-width: 3px;
+}
+.column:nth-of-type(1){
+    border-top-color: rgb(153, 153, 153);
+}
+.column:nth-of-type(2){
+    border-top-color: rgb(245, 121, 0);  
+}
+.column:nth-of-type(3){
+    border-top-color: rgb(114, 159, 207);
+}
+.column:nth-of-type(4){
+    border-top-color: rgb(78, 154, 6);
+}
+.column:nth-of-type(5){
+    border-top-color: rgb(204, 0, 0);
+}    
+.column:nth-of-type(6){
+    border-top-color:  rgb(92, 53, 102)
 }
