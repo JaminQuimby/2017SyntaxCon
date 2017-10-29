@@ -1,4 +1,8 @@
 {
+  "app": {
+    "title": "UAPI"
+  },
   "mode": "easy",
-  "compileMode": "aot"
+  "compileMode": "aot",
+  "name":""
 }

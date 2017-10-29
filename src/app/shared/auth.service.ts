@@ -21,7 +21,7 @@ export class AuthService {
     firebase.firestore().enablePersistence()
       .then(function () {
         // Initialize Cloud Firestore through firebase
-         firebase.firestore();
+       firebase.firestore();
       })
       .catch(function (err) {
         if (err.code === 'failed-precondition') {
@@ -42,8 +42,9 @@ export class AuthService {
   }
 
   public login() {
-    const provider = new firebase.auth.GoogleAuthProvider();
-    this.firebaseAuth.auth.signInWithPopup(provider)
+    let provider = new firebase.auth.GoogleAuthProvider();
+    provider.addScope('https://www.googleapis.com/auth/plus.login');
+    this.firebaseAuth.auth.signInWithRedirect(provider)
       .then((result) => console.log('Signin result', result))
       .catch((error) => console.error('Sigin error', error));
   }

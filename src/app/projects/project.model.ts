@@ -1,5 +1,5 @@
 export class ProjectModel {
   public id?: string;
-  public project: string;
+  public name: string;
   public description: string;
 }

@@ -37,11 +37,11 @@
 /* eslint-disable indent, no-unused-vars, no-multiple-empty-lines, max-nested-callbacks, space-before-function-paren, quotes, comma-spacing */
 'use strict';
 
-var precacheConfig = [["app.js","ea95f1acf832f7f3ea68c28a770b2d1a"],["index.html","1497ccbaa3ee72fad57c9b665b55228a"],["polyfills.js","2d78a5b21e179049ae34c33614f0abce"],["skyux.js","e26a5342fb53dca5417cde706258a2c0"],["vendor.js","376d8973c08595f7f47884e6ceb94a65"]];
+var precacheConfig = [["app.js","0b9f48821c9c494c26bc04fe578c2d2c"],["index.html","cd42db7b99fab4e6880128b6583bd5ab"],["polyfills.js","08e2379446a63e651f168aadf176bc89"],["skyux.js","2c82eb7f143e47393d6c54eeea5fbb78"],["vendor.js","484e67a645ccd36681c6079491624c7d"]];
 var cacheName = 'sw-precache-v3-sw-precache-' + (self.registration ? self.registration.scope : '');
 
 
-var ignoreUrlParametersMatching = [/^utm_/];
+var ignoreUrlParametersMatching = [/^apiKey/,/^utm_/];
 
 
 
@@ -233,7 +233,7 @@ self.addEventListener('fetch', function(event) {
     if (!shouldRespond &&
         navigateFallback &&
         (event.request.mode === 'navigate') &&
-        isPathWhitelisted([], event.request.url)) {
+        isPathWhitelisted(["^(?!\\/__)"], event.request.url)) {
       url = new URL(navigateFallback, self.location).toString();
       shouldRespond = urlsToCacheKeys.has(url);
     }
@@ -285,7 +285,9 @@ self.addEventListener('fetch', function(event) {
 
 // Runtime cache configuration, using the sw-toolbox library.
 
-toolbox.router.get(/otg2017-f4d23\.firebaseapp\.com/, toolbox.cacheFirst, {"cache":{"maxEntries":1000,"name":"runtime-cache"}});
+toolbox.router.get(/otg2017-f4d23\.firebaseapp\.com/, toolbox.cacheFirst, {"cache":{"maxEntries":8000,"name":"runtime-cache"}});
+toolbox.router.get(/sky\.blackbaudcdn\.net/, toolbox.cacheFirst, {"cache":{"maxEntries":8000,"name":"cdn-cache"}});
+toolbox.router.get(/maxcdn\.bootstrapcdn\.com/, toolbox.cacheFirst, {"cache":{"maxEntries":8000,"name":"cdn-cache"}});
 
 
 

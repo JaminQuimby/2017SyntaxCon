@@ -1,0 +1,11 @@
+{
+  "app": {
+    "title": "UAPI"
+  },
+  "mode": "easy",
+  "compileMode": "aot",
+  "name": "/",
+  "host": {
+    "url": "https://otg2017-f4d23.firebaseapp.com"
+  }
+}
