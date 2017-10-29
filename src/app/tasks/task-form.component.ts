@@ -4,7 +4,7 @@ import { TaskModel } from './task.model';
 import { ProjectsService } from '../projects/projects.service';
 import { ProjectModel } from '../projects/project.model';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import { FormGroup, FormControl, Validators, FormBuilder }
+import { FormGroup, Validators, FormBuilder }
   from '@angular/forms';
 
 @Component({
