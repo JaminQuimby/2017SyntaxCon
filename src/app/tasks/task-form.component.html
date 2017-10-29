@@ -1,31 +1,34 @@
 <sky-modal>
   <sky-modal-header> Task </sky-modal-header>
   <sky-modal-content>
+    <form [formGroup]="form" (ngSubmit)="instance.save(form.value)">
     <div>
       <label>
-        Project <br/>
-        <select [(ngModel)]="model.projectId">   
-          <option  *ngFor="let project of this.projectView.getValue()" value="{{project.id}}">{{project.name}}</option>
+        Project
+        <br/>
+        <select formControlName="projectId">
+          <option *ngFor="let project of this.projectView.getValue()" value="{{project.id}}">{{project.name}}</option>
         </select>
       </label>
     </div>
     <div>
       <label>
-      Person
-      <input type="text" [(ngModel)]="model.person" class="sky-form-control">
-    </label>
+        Person
+        <input type="text" formControlName="person" class="sky-form-control">
+      </label>
     </div>
 
     <div>
       <label>
-      Name
-      <input type="text" [(ngModel)]="model.name" class="sky-form-control">
-    </label>
+        Name
+        <input type="text" formControlName="name" class="sky-form-control">
+      </label>
     </div>
     <div>
       <label>
         Status
-        <select [(ngModel)]="model.status" >
+        <br/>
+        <select formControlName="status">
           <option>New</option>
           <option>Ready</option>
           <option>In Progress</option>
@@ -37,17 +40,27 @@
     </div>
     <div>
       <label>
-      Description
-      <input type="text" [(ngModel)]="model.description" class="sky-form-control">
-    </label>
+        Description
+        <input type="text" formControlName="description" class="sky-form-control">
+      </label>
     </div>
-
+    <div>
+      <label>Tags
+        <input type="text" formControlName="tags" class="sky-form-control">
+      </label>
+    </div>
+    <div>
+      <label>
+        <button type="button"  class="sky-btn sky-btn-default">Blocked</button>
+      </label>
+    </div>
+  </form>
   </sky-modal-content>
   <sky-modal-footer>
 
-    <button type="button" class="sky-btn sky-btn-primary" (click)="instance.save(this.model)">
-     <span *ngIf="!model.id"> Add </span>
-     <span *ngIf="model.id"> Edit </span>
+    <button type="button" class="sky-btn sky-btn-primary" (click)="instance.save(form.value)">
+      <span *ngIf="!form.controls.id.value"> Add </span>
+      <span *ngIf="form.controls.id.value"> Edit </span>
     </button>
 
     <button type="button" class="sky-btn sky-btn-default" (click)="instance.close()">

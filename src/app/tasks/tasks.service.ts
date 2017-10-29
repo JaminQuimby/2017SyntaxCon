@@ -33,6 +33,15 @@ export class TasksService {
   }
 
   public save(task: TaskModel) {
+    let tags: Array<string> = [];
+    if (task.tags) {
+      task.tags.toString().split(',')
+        .forEach((tag) => {
+          tags.push(tag);
+        });
+    }
+    task.tags = tags;
+
     if (task.id) {
       this.tasksCollection.doc(task.id).update(Object.assign({}, task));
     } else {

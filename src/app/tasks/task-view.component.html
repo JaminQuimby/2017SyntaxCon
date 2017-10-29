@@ -4,8 +4,11 @@
       {{task.name}}
     </sky-page-summary-subtitle>
     <sky-page-summary-status>
-      <sky-label>{{task.person}}</sky-label>
+      <sky-label *ngFor="let tag of task.tags">{{tag}}</sky-label>
     </sky-page-summary-status>
+    <sky-page-summary-content>
+      {{task.person}}
+    </sky-page-summary-content>
     <sky-page-summary-content>
       {{task.description}}
     </sky-page-summary-content>
