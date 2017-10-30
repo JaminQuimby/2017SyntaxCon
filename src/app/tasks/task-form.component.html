@@ -48,6 +48,28 @@
         <input type="text" [(ngModel)]="model.tags" class="sky-form-control">
       </label>
     </div>
+
+    <div>
+      <input type="checkbox" [(ngModel)]="model.clientRequirement" class="disable-textbox" #clientRequirement>
+      <button type="button" class="sky-btn sky-btn-default" (click)="clientRequirement.click();" [ngClass]="{ 'success-color': clientRequirement.checked }">
+        Client Requirement
+      </button>
+
+      <input type="checkbox" [(ngModel)]="model.teamRequirement" class="disable-textbox" #teamRequirement>
+      <button type="button" class="sky-btn sky-btn-default" (click)="teamRequirement.click();" [ngClass]="{ 'success-color': teamRequirement.checked }">
+        Tech Requirement
+      </button>
+    </div>
+    <div>
+      <input type="checkbox" [(ngModel)]="model.blocked" class="disable-textbox" #blocked>
+      <button type="button" class="sky-btn sky-btn-default" [ngClass]="{ 'danger-color': blocked.checked }" (click)="blocked.click();">
+        <label *ngIf="blocked.checked">Blocked</label>
+        <label *ngIf="!blocked.checked">Block</label>
+      </button>
+      <label *ngIf="blocked.checked">Description
+        <input type="text" [(ngModel)]="model.blockedDescription" class="sky-form-control">
+      </label>
+    </div>
   </sky-modal-content>
   <sky-modal-footer>
 

@@ -6,11 +6,11 @@ export class TaskModel {
   public person: string;
   public description: string;
   public tags: Array<string>;
-
-  public teamRequirement: boolean;
-  public clientRequirement: boolean;
   public blocked: boolean;
   public blockedDescription: string;
+  public teamRequirement: boolean;
+  public clientRequirement: boolean;
+
   public points: Array<PointsModel>;
 }
 

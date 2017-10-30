@@ -37,7 +37,7 @@ export class ProjectViewComponent {
       let [projectId, element] = value;
       let status = element.parentElement.dataset.column;
       let taskid = element.dataset.taskId;
-      this.service.update(taskid, { 'status': status }, {'projectId': projectId});
+      this.service.update(taskid, { 'status': status }, { 'projectId': projectId });
     });
     this.dragulaService.over.subscribe((value: any) => {
       // console.log(`over: ${value[0]}`);
@@ -77,8 +77,10 @@ export class ProjectViewComponent {
   }
 
   private onOver(args: any): void {
-    let [el] = args;
+    let [el, target] = args;
     this.addClass(el, 'ex-over');
+
+    target.classList.add('possibleTargetContainer');
   }
 
   private onOut(args: any): void {

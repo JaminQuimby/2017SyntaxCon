@@ -4,7 +4,19 @@
       {{task.name}}
     </sky-page-summary-subtitle>
     <sky-page-summary-status>
-      <sky-label *ngFor="let tag of task.tags">{{tag}}</sky-label>
+      <span *ngFor="let tag of task.tags">
+        <sky-label *ngIf="tag">{{tag}}</sky-label>
+      </span>
+
+      <sky-label *ngIf="task.clientRequirement" labelType="success">
+        Client
+      </sky-label>
+      <sky-label *ngIf="task.teamRequirement" labelType="success">
+        Team
+      </sky-label>
+      <sky-label *ngIf="task.blocked" labelType="danger">
+        Blocked
+      </sky-label>
     </sky-page-summary-status>
     <sky-page-summary-content>
       {{task.person}}

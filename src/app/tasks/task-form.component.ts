@@ -7,7 +7,8 @@ import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
 @Component({
   selector: 'task-form-modal',
-  templateUrl: './task-form.component.html'
+  templateUrl: './task-form.component.html',
+  styleUrls: ['task-form.component.scss']
 })
 
 export class TaskFormComponent {
