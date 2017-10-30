@@ -33,19 +33,11 @@ export class TasksService {
   }
 
   public save(task: TaskModel) {
-    let tags: Array<string> = [];
-    if (task.tags) {
-      task.tags.toString().split(',')
-        .forEach((tag) => {
-          tags.push(tag);
-        });
-    }
-    task.tags = tags;
-
-    if (task.id) {
-      this.tasksCollection.doc(task.id).update(Object.assign({}, task));
+    let mutated = this.mutations(task);
+    if (mutated.id) {
+      this.tasksCollection.doc(mutated.id).update(Object.assign({}, mutated));
     } else {
-      this.tasksCollection.add(Object.assign({}, task));
+      this.tasksCollection.add(Object.assign({}, mutated));
     }
   }
 
@@ -61,6 +53,17 @@ export class TasksService {
     this.tasksCollection.doc(id).delete();
   }
 
+  private mutations(task: TaskModel) {
+    let tags: Array<string> = [];
+    if (task.tags) {
+      task.tags.toString().split(',')
+        .forEach((tag) => {
+          tags.push(tag);
+        });
+    }
+    task.tags = tags;
+    return task;
+  }
   private updateView(task: Array<TaskModel>) {
     this.task$.next(task.reverse());
   }
