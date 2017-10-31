@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/firestore';
-import { AuthService } from '../shared/auth.service';
+import { AuthService } from '../shared/auth/auth.service';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { TaskModel } from './task.model';
 import { OrganizationModel } from '../shared/org/organization.model';
