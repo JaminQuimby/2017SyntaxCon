@@ -2,7 +2,7 @@ import { AngularFireAuth } from 'angularfire2/auth';
 import { AngularFireDatabaseModule } from 'angularfire2/database';
 import { AngularFirestoreModule } from 'angularfire2/firestore';
 import { AngularFireModule } from 'angularfire2';
-import { AuthService } from './shared/auth.service';
+import { AuthService } from './shared/auth/auth.service';
 import { ProjectViewComponent } from './projects/project-view.component';
 import { DragulaService, DragulaModule } from 'ng2-dragula/ng2-dragula';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -12,16 +12,16 @@ import { ProjectFormComponent } from './projects/project-form.component';
 import { ProjectsService } from './projects/projects.service';
 import { TaskFormComponent } from './tasks/task-form.component';
 import { TasksService } from './tasks/tasks.service';
-
-/*
 import { SkyAppBootstrapper } from '@blackbaud/skyux-builder/runtime/bootstrapper';
+
 (SkyAppBootstrapper as any).processBootstrapConfig = () => {
-  return new Promise((resolve, reject) => {
-  //  reject(false);
-    resolve(true);
-  });
+    return new Promise((resolve, reject) => {
+        //  reject(false);
+       resolve(true);
+
+    });
 };
-*/
+
 const environment = {
     production: false,
     p2p: {

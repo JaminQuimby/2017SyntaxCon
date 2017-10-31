@@ -2,7 +2,7 @@
 <h1>The Progressive Web</h1>
 
 <h1 *ngIf="user">Welcome {{ user?.email }}!</h1>
-{{user}}
+{{user | json}}
 <div *ngIf="!user?.uid">
   <button (click)="login()" >
     Login

@@ -3,7 +3,7 @@ import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/fires
 import { AuthService } from '../shared/auth.service';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { TaskModel } from './task.model';
-import { OrganizationModel } from '../shared/organization.model';
+import { OrganizationModel } from '../shared/org/organization.model';
 
 @Injectable()
 export class TasksService {

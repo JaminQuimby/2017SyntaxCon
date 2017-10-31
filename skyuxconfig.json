@@ -4,5 +4,6 @@
   },
   "mode": "easy",
   "compileMode": "aot",
-  "name":""
+  "name":"",
+  "omnibar": false,
 }

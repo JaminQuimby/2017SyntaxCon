@@ -3,6 +3,7 @@
     "title": "UAPI"
   },
   "mode": "easy",
+  "omnibar": false,
   "compileMode": "aot",
   "name": "/",
   "host": {
