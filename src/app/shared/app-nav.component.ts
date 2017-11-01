@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { AuthService } from '../shared/auth/auth.service';
+import { ProfileService } from '../shared/profile/profile.service';
 
 @Component({
   selector: 'app-nav',
@@ -8,14 +8,12 @@ import { AuthService } from '../shared/auth/auth.service';
 })
 
 export class AppNavComponent {
-  public userPhoto: string;
-  public userName: string;
   public nav = [
     {
       name: 'Home',
       path: '/'
     },
-     {
+    {
       name: 'Dashboard',
       path: '/dashboard'
     },
@@ -28,11 +26,6 @@ export class AppNavComponent {
       path: '/tasks'
     }
   ];
-  constructor(private auth: AuthService) {
-    this.auth.user$.subscribe(user => {
-      this.userPhoto = user.photoURL;
-      this.userName = user.displayName;
-    });
-  }
+  constructor(public profile: ProfileService) { }
 
 }

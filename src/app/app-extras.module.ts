@@ -10,6 +10,8 @@ import { WebStorageModule } from 'ngx-store';
 import { NgModule } from '@angular/core';
 import { ProjectFormComponent } from './projects/project-form.component';
 import { ProjectsService } from './projects/projects.service';
+import { ProfileService } from './shared/profile/profile.service';
+import { ProfileFormComponent } from './shared/profile/profile-form.component';
 import { TaskFormComponent } from './tasks/task-form.component';
 import { TasksService } from './tasks/tasks.service';
 import { SkyAppBootstrapper } from '@blackbaud/skyux-builder/runtime/bootstrapper';
@@ -17,7 +19,7 @@ import { SkyAppBootstrapper } from '@blackbaud/skyux-builder/runtime/bootstrappe
 (SkyAppBootstrapper as any).processBootstrapConfig = () => {
     return new Promise((resolve, reject) => {
         //  reject(false);
-       resolve(true);
+        resolve(true);
 
     });
 };
@@ -48,11 +50,19 @@ const environment = {
         WebStorageModule
     ],
     exports: [DragulaModule],
-    providers: [AuthService, AngularFireAuth, DragulaService, ProjectsService, TasksService],
+    providers: [
+        AuthService,
+        AngularFireAuth,
+        DragulaService,
+        ProjectsService,
+        TasksService,
+        ProfileService
+    ],
     entryComponents: [
         TaskFormComponent,
         ProjectFormComponent,
-        ProjectViewComponent
+        ProjectViewComponent,
+        ProfileFormComponent
     ]
 })
 export class AppExtrasModule { }

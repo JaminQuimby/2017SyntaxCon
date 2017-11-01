@@ -4,7 +4,8 @@ import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/fires
 import * as firebase from 'firebase/app';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Observable } from 'rxjs/Observable';
-import { OrganizationModel } from './organization.model';
+import { OrganizationModel } from '../org/organization.model';
+import { ProfileModel } from '../profile/profile.model';
 
 @Injectable()
 export class AuthService {
@@ -52,13 +53,14 @@ export class AuthService {
     this.firebaseAuth
       .auth
       .signOut();
+    let user: ProfileModel = new ProfileModel();
+    this.user$.next(user);
+    this.org$.next(undefined);
   }
 
   private lookupOrgBy(userUid: string) {
     // database
-    this.orgCollection = this.db.collection('/users/' + userUid + '/organization');
-    // does not contain ids //  this.tasks$ = this.tasksCollection.valueChanges();
-
+    this.orgCollection = this.db.collection(`/users/${userUid}/organization`);
     this.orgCollection.snapshotChanges().map(actions => {
       return actions.map(action => {
         const data = action.payload.doc.data() as OrganizationModel;
@@ -66,5 +68,10 @@ export class AuthService {
         return { id, ...data };
       });
     }).subscribe(org => { this.org$.next(org[0]); });
+  }
+
+  private lookupUserBy(userUid: string) {
+    let userId = this.db.collection(`/users`).doc(userUid).ref.id;
+    return userId;
   }
 }
