@@ -15,7 +15,7 @@ import { ProfileFormComponent } from './shared/profile/profile-form.component';
 import { TaskFormComponent } from './tasks/task-form.component';
 import { TasksService } from './tasks/tasks.service';
 import { SkyAppBootstrapper } from '@blackbaud/skyux-builder/runtime/bootstrapper';
-
+import { JTagInputModule } from 'skyux-lib-j-tags';
 (SkyAppBootstrapper as any).processBootstrapConfig = () => {
     return new Promise((resolve, reject) => {
         //  reject(false);
@@ -47,9 +47,10 @@ const environment = {
         DragulaModule,
         FormsModule,
         ReactiveFormsModule,
-        WebStorageModule
+        WebStorageModule,
+        JTagInputModule
     ],
-    exports: [DragulaModule],
+    exports: [DragulaModule, JTagInputModule],
     providers: [
         AuthService,
         AngularFireAuth,
