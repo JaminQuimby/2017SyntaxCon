@@ -57,7 +57,10 @@ export class AuthService {
     this.user$.next(user);
     this.org$.next(undefined);
   }
-
+  public lookupUserBy(userUid: string) {
+    let userId = this.db.collection(`/users`).doc(userUid).ref.id;
+    return userId;
+  }
   private lookupOrgBy(userUid: string) {
     // database
     this.orgCollection = this.db.collection(`/users/${userUid}/organization`);
@@ -70,8 +73,4 @@ export class AuthService {
     }).subscribe(org => { this.org$.next(org[0]); });
   }
 
-  private lookupUserBy(userUid: string) {
-    let userId = this.db.collection(`/users`).doc(userUid).ref.id;
-    return userId;
-  }
 }
