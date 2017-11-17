@@ -1,15 +1,16 @@
 <app-nav></app-nav>
 <h1>The Progressive Web</h1>
 
-<h1 *ngIf="profile.displayName">Welcome {{ profile.displayName }}!</h1>
-<div *ngIf="!profile.uid">
+<h1 *ngIf="model.displayName">Welcome {{ model.displayName }}!</h1>
+<div *ngIf="!model.uid">
   <button (click)="login()" >
     Login
   </button>
 </div>
+<button (click)="logout()" *ngIf="model.uid">
+  Logout
+</button>
 
 <uapi-profile-form></uapi-profile-form>
 
-<button (click)="logout()" *ngIf="profile.uid">
-  Logout
-</button>
+

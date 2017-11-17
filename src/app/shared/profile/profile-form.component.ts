@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { ProfileModel } from './profile.model';
+import { UserModel } from '../user/user.model';
 import { ProfileService } from './profile.service';
 
 @Component({
@@ -8,10 +8,12 @@ import { ProfileService } from './profile.service';
 })
 
 export class ProfileFormComponent {
-  public model: ProfileModel;
+  public model: UserModel;
   constructor(
     public profile: ProfileService) {
-    this.model = this.profile;
+    this.profile.user$.subscribe((user) => {
+      this.model = user;
+    });
   }
 
 }

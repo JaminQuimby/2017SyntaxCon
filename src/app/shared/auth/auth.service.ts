@@ -5,7 +5,7 @@ import * as firebase from 'firebase/app';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Observable } from 'rxjs/Observable';
 import { OrganizationModel } from '../org/organization.model';
-import { ProfileModel } from '../profile/profile.model';
+import { UserModel } from '../user/user.model';
 
 @Injectable()
 export class AuthService {
@@ -13,7 +13,7 @@ export class AuthService {
   public user$: BehaviorSubject<any> = new BehaviorSubject([]);
   public org$: BehaviorSubject<any> = new BehaviorSubject([]);
 
-  public orgCollection: AngularFirestoreCollection<any>;
+  public orgCollection: AngularFirestoreCollection<OrganizationModel>;
 
   constructor(
     private firebaseAuth: AngularFireAuth,
@@ -53,14 +53,27 @@ export class AuthService {
     this.firebaseAuth
       .auth
       .signOut();
-    let user: ProfileModel = new ProfileModel();
+    let user: UserModel = new UserModel();
     this.user$.next(user);
     this.org$.next(undefined);
   }
-  public lookupUserBy(userUid: string) {
-    let userId = this.db.collection(`/users`).doc(userUid).ref.id;
-    return userId;
+  public lookupUserBy(userUid: string): UserModel {
+    let user = this.db.collection(`/users`).doc(userUid).ref;
+    user.get().then(function (doc) {
+      if (doc.exists) {
+        console.log('user data:', doc.data());
+        return doc.data();
+      } else {
+        console.log('No such user');
+        return undefined;
+      }
+    }).catch(function (error) {
+      console.log('Error getting user:', error);
+      return undefined;
+    });
+    return undefined;
   }
+
   private lookupOrgBy(userUid: string) {
     // database
     this.orgCollection = this.db.collection(`/users/${userUid}/organization`);
