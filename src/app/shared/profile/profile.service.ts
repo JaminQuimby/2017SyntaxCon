@@ -24,7 +24,7 @@ export class ProfileService {
         if (lookupUser) {
           this.user$.next(lookupUser);
         } else {
-          this.user$.next({ 'role': 'admin', ...data });
+          this.user$.next({ 'role': 'admin', 'id': data.uid, ...data });
           this.db.collection(`/users`).doc(user.uid)
             .set(Object.assign({}, this.user$.getValue()));
         }

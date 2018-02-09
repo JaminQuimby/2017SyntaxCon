@@ -24,11 +24,11 @@ export class AuthService {
         // Initialize Cloud Firestore through firebase
         firebase.firestore();
       })
-      .catch(function (err) {
-        if (err.code === 'failed-precondition') {
-          console.log(err.code);
-        } else if (err.code === 'unimplemented') {
-          console.log(err.code);
+      .catch(function (error) {
+        if (error.code === 'failed-precondition') {
+          console.log(error.code);
+        } else if (error.code === 'unimplemented') {
+          console.log(error.code);
         }
       });
     this.user = firebaseAuth.authState;
@@ -37,7 +37,7 @@ export class AuthService {
         // Set user as subject
         this.user$.next(user);
         // Set org as subject
-        this.lookupOrgBy(user.uid);
+        this.loadOrg(user.uid);
       }
     });
   }
@@ -57,14 +57,13 @@ export class AuthService {
     this.user$.next(user);
     this.org$.next(undefined);
   }
+
   public lookupUserBy(userUid: string): UserModel {
     let user = this.db.collection(`/users`).doc(userUid).ref;
     user.get().then(function (doc) {
       if (doc.exists) {
-        console.log('user data:', doc.data());
         return doc.data();
       } else {
-        console.log('No such user');
         return undefined;
       }
     }).catch(function (error) {
@@ -74,7 +73,19 @@ export class AuthService {
     return undefined;
   }
 
-  private lookupOrgBy(userUid: string) {
+  public lookupOrgBy(userUid: string): UserModel {
+    let org = this.db.collection(`/users/${userUid}/organization`).ref;
+    org.get().then(function (doc) {
+      if (doc) {
+        return '';
+      } else {
+        return undefined;
+      }
+    });
+    return undefined;
+  }
+
+  private loadOrg(userUid: string) {
     // database
     this.orgCollection = this.db.collection(`/users/${userUid}/organization`);
     this.orgCollection.snapshotChanges().map(actions => {

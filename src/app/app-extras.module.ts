@@ -8,6 +8,7 @@ import { DragulaService, DragulaModule } from 'ng2-dragula/ng2-dragula';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { WebStorageModule } from 'ngx-store';
 import { NgModule } from '@angular/core';
+import { OrganizationService } from './shared/org/organization.service';
 import { ProjectFormComponent } from './projects/project-form.component';
 import { ProjectsService } from './projects/projects.service';
 import { ProfileService } from './shared/profile/profile.service';
@@ -57,6 +58,7 @@ const environment = {
         DragulaService,
         ProjectsService,
         TasksService,
+        OrganizationService,
         ProfileService
     ],
     entryComponents: [
