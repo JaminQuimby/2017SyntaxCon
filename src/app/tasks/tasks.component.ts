@@ -3,7 +3,6 @@ import { Component } from '@angular/core';
 import { SkyModalService, SkyModalCloseArgs } from '@blackbaud/skyux/dist/core';
 import { TaskModel } from './task.model';
 import { TaskFormComponent } from './task-form.component';
-import { TasksService } from './tasks.service';
 
 @Component({
   selector: 'uapi-tasks',
@@ -12,7 +11,6 @@ import { TasksService } from './tasks.service';
 
 export class TaskComponent {
   constructor(
-    public service: TasksService,
     private modal: SkyModalService) { }
 
   // Skyux Modal with a form inside.
@@ -29,7 +27,7 @@ export class TaskComponent {
       .open(TaskFormComponent, windowMode['defaultModal'])
       .closed.subscribe((result: SkyModalCloseArgs) => {
         if (result.reason === 'save') {
-          this.service.save(Object.assign(new TaskModel(), result.data));
+         //  this.service.save(Object.assign(new TaskModel(), result.data));
         }
       });
   }

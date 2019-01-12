@@ -1,5 +1,6 @@
 <h1>Project List</h1>
-<sky-list [data]="service.projects$" [defaultView]="grid">
+
+<sky-list [data]="projects" [defaultView]="grid">
   <sky-list-toolbar>
 
     <sky-list-secondary-actions>
@@ -18,7 +19,7 @@
     <sky-grid-column field="composite" [template]="contextMenu"></sky-grid-column>
 
     <sky-grid-column field="name" heading="Name" description="A project name"></sky-grid-column>
-    <sky-grid-column field="description" heading="Description" description="A discription"> </sky-grid-column>
+    <sky-grid-column field="description" heading="Description" description="A description"> </sky-grid-column>
   </sky-list-view-grid>
 </sky-list>
 
@@ -28,10 +29,10 @@
     <sky-dropdown-menu>
       <sky-dropdown-item>
         <button type="button" (click)="openModal(row)">
-            Edit 
+            Edit
           </button>
-        <button type="button" (click)="service.remove(row.id)">
-            Remove 
+        <button type="button" (click)="remove(row.id)">
+            Remove
           </button>
       </sky-dropdown-item>
     </sky-dropdown-menu>

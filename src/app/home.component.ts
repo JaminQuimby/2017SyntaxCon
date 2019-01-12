@@ -9,21 +9,21 @@ import { UserModel } from './shared/user/user.model';
 })
 
 export class HomeComponent {
-  public email: string;
-  public password: string;
   public model: UserModel;
+  private email: string;
+  private password: string;
 
   constructor(
     private auth: AuthService,
     public profile: ProfileService
   ) {
-    this.profile.user$.subscribe((user) => {
+    this.profile.user$.subscribe((user: UserModel) => {
       this.model = user;
     });
   }
 
   public login() {
-    this.auth.login();
+    this.auth.login_google();
     this.email = this.password = '';
   }
 

@@ -1,6 +1,5 @@
 import { Component, Input } from '@angular/core';
 import { DragulaService } from 'ng2-dragula/ng2-dragula';
-import { TasksService } from '../tasks/tasks.service';
 import { TaskModel } from '../tasks/task.model';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
@@ -18,15 +17,15 @@ export class ProjectViewComponent {
   public projectName: string;
 
   public tasks: BehaviorSubject<Array<TaskModel>> =
-  new BehaviorSubject(new Array(new TaskModel));
+    new BehaviorSubject(new Array(new TaskModel));
 
   constructor(
-    private dragulaService: DragulaService,
-    private service: TasksService) {
-    this.service.task$.subscribe(tasks => {
-      if (tasks.length >= 1) { this.tasks.next(tasks); }
-    });
-
+    private dragulaService: DragulaService) {
+    /*
+        this.service.task$.subscribe(tasks => {
+          if (tasks.length >= 1) { this.tasks.next(tasks); }
+        });
+    */
     this.dragulaService.drag.subscribe((value: any) => {
       // console.log(`drag: ${value[0]}`); // value[0] will always be bag name
       this.onDrag(value.slice(1));
@@ -37,7 +36,7 @@ export class ProjectViewComponent {
       let [projectId, element] = value;
       let status = element.parentElement.dataset.column;
       let taskid = element.dataset.taskId;
-      this.service.update(taskid, { 'status': status }, { 'projectId': projectId });
+      // this.service.update(taskid, { 'status': status }, { 'projectId': projectId });
     });
     this.dragulaService.over.subscribe((value: any) => {
       // console.log(`over: ${value[0]}`);

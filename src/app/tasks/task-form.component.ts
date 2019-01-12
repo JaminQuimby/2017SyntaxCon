@@ -1,9 +1,8 @@
 import { Component } from '@angular/core';
 import { SkyModalInstance } from '@blackbaud/skyux/dist/core';
 import { TaskModel } from './task.model';
-import { ProjectsService } from '../projects/projects.service';
 import { ProjectModel } from '../projects/project.model';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { Container } from '../shared/database.service';
 
 @Component({
   selector: 'task-form-modal',
@@ -12,16 +11,12 @@ import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 })
 
 export class TaskFormComponent {
-  public projectView: BehaviorSubject<Array<ProjectModel>> = new BehaviorSubject([]);
+
+  @Container('user/$uid$/projects')
+  public projects: ProjectModel;
 
   constructor(
     public model: TaskModel,
-    public instance: SkyModalInstance,
-    private projects: ProjectsService
-  ) {
-
-    this.projects.projects$.subscribe(project => {
-      if (project) { this.projectView.next(project); }
-    });
-  }
+    public instance: SkyModalInstance
+  ) { }
 }

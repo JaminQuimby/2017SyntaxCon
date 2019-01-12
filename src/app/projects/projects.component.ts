@@ -2,21 +2,23 @@ import { Component } from '@angular/core';
 import { SkyModalService, SkyModalCloseArgs } from '@blackbaud/skyux/dist/core';
 import { ProjectModel } from './project.model';
 import { ProjectFormComponent } from './project-form.component';
-import { ProjectsService } from './projects.service';
+import { Container } from '../shared/database.service';
+import { Observable, Subject } from 'rxjs';
 
 @Component({
   selector: 'uapi-projects',
-  templateUrl: './projects.component.html',
-  styleUrls: ['projects.component.scss']
+  templateUrl: './projects.component.html'
 })
 
 export class ProjectComponent {
-  constructor(
-    public service: ProjectsService,
-    private modal: SkyModalService) { }
+  @Container(`users/$uid$/projects`)
+  private projects: Subject<ProjectModel[]>;
+  constructor(private modal: SkyModalService) {
+  }
 
   // Skyux Modal with a form inside.
   public openModal(project?: ProjectModel) {
+
     let model = new ProjectModel();
     if (project) { model = project; }
     let windowMode: any = {
@@ -28,8 +30,10 @@ export class ProjectComponent {
     this.modal
       .open(ProjectFormComponent, windowMode['defaultModal'])
       .closed.subscribe((result: SkyModalCloseArgs) => {
+        console.log(this.projects, 'close');
+        const modal = new ProjectModel();
         if (result.reason === 'save') {
-          this.service.save(Object.assign(new ProjectModel(), result.data));
+          this.projects = { ...modal, ...result.data };
         }
       });
   }

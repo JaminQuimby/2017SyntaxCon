@@ -4,9 +4,12 @@
     "outDir": "./dist",
     "allowJs": true,
     "module": "commonjs",
+    "target": "es5",
     "moduleResolution": "node",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
+    "noEmitHelpers": false,
+    "importHelpers": true,
     "typeRoots": [
       "../node_modules/@types"
     ],
