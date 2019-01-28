@@ -6,7 +6,7 @@
         Project
         <br/>
         <select [(ngModel)]="model.projectId">
-          <option *ngFor="let project of this.projectView.getValue()" value="{{project.id}}">{{project.name}}</option>
+          <option *ngFor="let project of projects | async " value="{{project.id}}">{{project.name}}</option>
         </select>
       </label>
     </div>
@@ -71,7 +71,7 @@
   </sky-modal-content>
   <sky-modal-footer>
 
-    <button type="button" class="sky-btn sky-btn-primary" (click)="instance.save(this.model)">
+    <button type="button" class="sky-btn sky-btn-primary" (click)="instance.save(model)">
       <span *ngIf="!model.id"> Add </span>
       <span *ngIf="model.id"> Edit </span>
     </button>

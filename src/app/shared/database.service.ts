@@ -1,16 +1,15 @@
 import { Injectable, ReflectiveInjector } from '@angular/core';
 import { AngularFirestore, AngularFirestoreCollection, AngularFirestoreDocument } from 'angularfire2/firestore';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { AppExtrasModule } from '../app-extras.module';
 import { AuthService } from './auth/auth.service';
-import { Subject } from 'rxjs';
+import { ReplaySubject } from 'rxjs';
 
 @Injectable()
 export class DatabaseService {
   public databasesCollection: AngularFirestoreCollection<any>;
   public databaseDocument: AngularFirestoreDocument<any>;
   public databasesDocument: AngularFirestoreDocument<{}>;
-  public database$: BehaviorSubject<Array<any>> = new BehaviorSubject([]);
+  public database$: ReplaySubject<Array<any>> = new ReplaySubject(1);
   private uid: string;
   private collection: string;
   private docRef: string;
@@ -19,7 +18,7 @@ export class DatabaseService {
   }
 
   public async bootstrap(collection: string, docRef?: string) {
-
+    console.log('bootstrapping', docRef);
     this.auth.user$.subscribe((user) => {
       if (user) {
         collection = collection && collection.replace('$uid$', user.uid);
@@ -32,19 +31,13 @@ export class DatabaseService {
           this.databasesCollection = this.db.collection(`/${this.collection}/`);
           if (this.docRef) {
             this.databaseDocument = this.databasesCollection.doc(this.docRef);
-            this.databaseDocument.snapshotChanges().map(action => {
-              const data = action.payload.data();
-              const id = action.payload.id;
-              return { id, ...data };
-            }).subscribe((data) => (data.id && this.updateView([data])));
+            this.databaseDocument.snapshotChanges()
+              .map(this.documentSnapshotToDomainObject)
+              .subscribe((data) => (data.id && this.updateView([data])));
           } else {
-            this.databasesCollection.snapshotChanges().map(actions => {
-              return actions.map(action => {
-                const data = action.payload.doc.data();
-                const id = action.payload.doc.id;
-                return { id, ...data };
-              });
-            }).subscribe((data) => (data.length > 0 && this.updateView(data)));
+            this.databasesCollection.snapshotChanges()
+              .map(actions => actions.map(this.documentToDomainObject))
+              .subscribe((data) => (data.length > 0 && this.updateView(data)));
           }
 
         }
@@ -68,7 +61,7 @@ export class DatabaseService {
   }
 
   public update(id: string, ...data: any[]) {
-    let change: any = this.database$.getValue().find(database => database.id === id);
+    let change: any = this.database$.subscribe(database => database.find(db => db.id === id));
     let changes: any = { ...change, ...data };
     this.save(changes);
   }
@@ -108,11 +101,31 @@ export function Container(collection: string, docRef?: string): PropertyDecorato
     let authService: AuthService;
     HOOKS.forEach((hook) => {
       if (hook === 'ngOnInit') {
+        console.log('hiddenOnInitHookFire', hook);
         const selfOnInit = constructor.prototype[hook];
-        let storedSubject: Subject<Array<any>> = new Subject();
-        let storedModel: Array<any> = [];
+        let storedSubject: ReplaySubject<Array<any>> = new ReplaySubject(1);
+        let storedModel: Array<any>;
+
+        Object.defineProperty(target, propertyKey, {
+          configurable: true,
+          enumerable: true,
+          get: () => {
+            return storedSubject;
+          },
+          set: (newData) => {
+            storedModel = Array.isArray(newData) ? newData : [newData];
+            storedSubject.next(storedModel);
+            console.log('setter init', newData);
+            if (storedModel.length === 1) {
+              // Used to save first page in the container...
+              // Replace with a init page?
+              databaseService.save(newData);
+            }
+          }
+        });
 
         constructor.prototype[hook] = (...args: Array<any>) => {
+          console.log('hook', hook);
           angularFirestore = AppExtrasModule.injector.get(AngularFirestore);
           authService = AppExtrasModule.injector.get(AuthService);
           const service = ReflectiveInjector.resolveAndCreate([
@@ -122,11 +135,14 @@ export function Container(collection: string, docRef?: string): PropertyDecorato
           ]);
           databaseService = service.get(DatabaseService);
           databaseService.bootstrap(collection, docRef);
-          databaseService.database$.distinctUntilChanged()
-            .subscribe((model) => {
+          databaseService.database$
+            .subscribe((model: any) => {
+              console.log('model', model);
               if (model) {
+
                 storedModel = Array.isArray(model) ? model : [model];
                 storedSubject.next(storedModel);
+                console.log('distinct change', model, storedModel, storedSubject);
                 Object.defineProperty(target, propertyKey, {
                   configurable: true,
                   enumerable: true,
@@ -137,9 +153,11 @@ export function Container(collection: string, docRef?: string): PropertyDecorato
                     console.log('newData', newData);
                     if (storedModel === newData) { return; }
                     databaseService.save(newData);
-                    storedSubject.next(storedModel);
-                    const current = databaseService.database$.getValue();
-                    const next = { ...current.find(obj => obj.id === newData.id), newData };
+                    let current: any = [];
+                    databaseService.database$
+                      .subscribe(database => current = database);
+
+                    const next = { ...current.find((obj: any) => obj.id === newData.id), newData };
                     databaseService.database$.next(next);
                   }
                 });
@@ -149,6 +167,7 @@ export function Container(collection: string, docRef?: string): PropertyDecorato
         };
       }
       if (hook === 'ngOnDestroy') {
+        console.log('hook', hook);
         const selfOnDestory = constructor.prototype[hook];
         if (databaseService) {
           if (typeof selfOnDestory === 'function') { selfOnDestory(); }

@@ -2,15 +2,15 @@ import { Injectable } from '@angular/core';
 import { AngularFireAuth } from 'angularfire2/auth';
 import { AngularFirestore } from 'angularfire2/firestore';
 import * as firebase from 'firebase';
-import { Subject } from 'rxjs/Subject';
 import { Observable } from 'rxjs/Observable';
 import { AuthUserModel } from './auth.model';
 import { UserModel } from '../user/user.model';
+import { ReplaySubject } from 'rxjs';
 
 @Injectable()
 export class AuthService {
   private user: Observable<firebase.User>;
-  public user$: Subject<AuthUserModel> = new Subject();
+  public user$: ReplaySubject<AuthUserModel> = new ReplaySubject(1);
 
   constructor(
     private firebaseAuth: AngularFireAuth,

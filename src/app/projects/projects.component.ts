@@ -3,7 +3,7 @@ import { SkyModalService, SkyModalCloseArgs } from '@blackbaud/skyux/dist/core';
 import { ProjectModel } from './project.model';
 import { ProjectFormComponent } from './project-form.component';
 import { Container } from '../shared/database.service';
-import { Observable, Subject } from 'rxjs';
+import { ReplaySubject } from 'rxjs';
 
 @Component({
   selector: 'uapi-projects',
@@ -11,14 +11,15 @@ import { Observable, Subject } from 'rxjs';
 })
 
 export class ProjectComponent {
-  @Container(`users/$uid$/projects`)
-  private projects: Subject<ProjectModel[]>;
-  constructor(private modal: SkyModalService) {
-  }
 
+  @Container(`users/$uid$/projects`)
+  public projects: ReplaySubject<ProjectModel[]>;
+  constructor(private modal: SkyModalService) { }
+  public remove(id) {
+    this.projects = { 'id': id };
+  }
   // Skyux Modal with a form inside.
   public openModal(project?: ProjectModel) {
-
     let model = new ProjectModel();
     if (project) { model = project; }
     let windowMode: any = {
@@ -30,9 +31,9 @@ export class ProjectComponent {
     this.modal
       .open(ProjectFormComponent, windowMode['defaultModal'])
       .closed.subscribe((result: SkyModalCloseArgs) => {
-        console.log(this.projects, 'close');
-        const modal = new ProjectModel();
         if (result.reason === 'save') {
+          const modal = new ProjectModel();
+          console.log('modal', modal);
           this.projects = { ...modal, ...result.data };
         }
       });

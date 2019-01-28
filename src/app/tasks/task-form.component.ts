@@ -3,6 +3,7 @@ import { SkyModalInstance } from '@blackbaud/skyux/dist/core';
 import { TaskModel } from './task.model';
 import { ProjectModel } from '../projects/project.model';
 import { Container } from '../shared/database.service';
+import { ReplaySubject } from 'rxjs';
 
 @Component({
   selector: 'task-form-modal',
@@ -12,8 +13,8 @@ import { Container } from '../shared/database.service';
 
 export class TaskFormComponent {
 
-  @Container('user/$uid$/projects')
-  public projects: ProjectModel;
+  @Container(`users/$uid$/projects`)
+  public projects: ReplaySubject<ProjectModel[]>;
 
   constructor(
     public model: TaskModel,
