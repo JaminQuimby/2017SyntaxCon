@@ -4,7 +4,7 @@ import { SkyModalService, SkyModalCloseArgs } from '@blackbaud/skyux/dist/core';
 import { TaskModel } from './task.model';
 import { TaskFormComponent } from './task-form.component';
 import { Container } from '../shared/database.service';
-import { ReplaySubject } from 'rxjs';
+import { Subject } from 'rxjs';
 
 @Component({
   selector: 'uapi-tasks',
@@ -14,8 +14,17 @@ import { ReplaySubject } from 'rxjs';
 export class TaskComponent {
 
   @Container(`users/$uid$/tasks`)
-  public tasks: ReplaySubject<Array<TaskModel>>;
+  public tasks: Subject<Array<TaskModel>>;
   constructor(private modal: SkyModalService) { }
+
+  public save(page: TaskModel) {
+    const modal = new TaskModel();
+    this.tasks.next([{ ...modal, ...page }]);
+  }
+
+  public remove(page: TaskModel) {
+    this.save({ 'id': page.id } as TaskModel);
+  }
 
   // Skyux Modal with a form inside.
   public openModal(task?: TaskModel) {
@@ -31,8 +40,7 @@ export class TaskComponent {
       .open(TaskFormComponent, windowMode['defaultModal'])
       .closed.subscribe((result: SkyModalCloseArgs) => {
         if (result.reason === 'save') {
-          const modal = new TaskModel();
-          this.tasks.next([{ ...modal, ...result.data }]);
+          this.save(result.data);
         }
       });
   }

@@ -13,7 +13,6 @@ export class TaskModel {
 
   public points: Array<PointsModel>;
 }
-
 export class PointsModel {
   public name: string;
   public value: number;

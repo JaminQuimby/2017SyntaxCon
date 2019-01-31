@@ -27,12 +27,10 @@
   <sky-dropdown buttonType="context-menu">
     <sky-dropdown-menu>
       <sky-dropdown-item>
-        <button type="button" (click)="openModal(row)">
-            Edit
-          </button>
-        <button type="button" (click)="remove(row.id)">
-            Remove
-          </button>
+        <button type="button" (click)="openModal(row)">Edit</button>
+      </sky-dropdown-item>
+      <sky-dropdown-item>
+        <button type="button" (click)="remove(row)">Remove</button>
       </sky-dropdown-item>
     </sky-dropdown-menu>
   </sky-dropdown>

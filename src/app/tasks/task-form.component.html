@@ -6,6 +6,7 @@
         Project
         <br/>
         <select [(ngModel)]="model.projectId">
+          <option value="">None</option>
           <option *ngFor="let project of projects | async " value="{{project.id}}">{{project.name}}</option>
         </select>
       </label>
