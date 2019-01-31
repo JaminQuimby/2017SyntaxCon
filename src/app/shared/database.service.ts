@@ -1,15 +1,19 @@
-import { Injectable, ReflectiveInjector } from '@angular/core';
+import { Injectable, ReflectiveInjector, SimpleChange } from '@angular/core';
 import { AngularFirestore, AngularFirestoreCollection, AngularFirestoreDocument } from 'angularfire2/firestore';
 import { AppExtrasModule } from '../app-extras.module';
 import { AuthService } from './auth/auth.service';
 import { ReplaySubject } from 'rxjs';
+export interface SimplePage {
+  id?: string;
+  [key: string]: any;
+}
 
 @Injectable()
 export class DatabaseService {
   public databasesCollection: AngularFirestoreCollection<any>;
   public databaseDocument: AngularFirestoreDocument<any>;
   public databasesDocument: AngularFirestoreDocument<{}>;
-  public database$: ReplaySubject<Array<any>> = new ReplaySubject(1);
+  public database$: ReplaySubject<Array<SimplePage>> = new ReplaySubject(1);
   private uid: string;
   private collection: string;
   private docRef: string;
@@ -49,41 +53,44 @@ export class DatabaseService {
   public database() {
     return this.database$;
   }
-  public save(database: any) {
-    let mutated = this.mutations(database);
-    mutated.id ?
-      this.databasesCollection.doc(mutated.id).update(mutated) :
-      this.databasesCollection.add(mutated);
+  public save({ id, ...params }: any) {
+    let mutated = this.mutations(params);
+    if (id) {
+      const page: SimplePage = { 'id': id, ...mutated };
+      Object.keys(mutated).length !== 0 ? this.update(page) : this.remove(id);
+    } else {
+      this.add(mutated);
+    }
+
+  }
+  private add(page: SimplePage) {
+    this.databasesCollection.add(page);
   }
 
-  public remove(id: string) {
+  private remove(id: string) {
     this.databasesCollection.doc(id).delete();
   }
 
-  public update(id: string, ...data: any[]) {
-    let change: any = this.database$.subscribe(database => database.find(db => db.id === id));
-    let changes: any = { ...change, ...data };
-    this.save(changes);
+  private update({ id, ...params }: SimplePage) {
+    this.databasesCollection.doc(id).update(params);
   }
 
-  private documentToDomainObject = (_: any) => {
-    console.log('doc2domain', _);
-    const data = _.payload.doc.data();
+  private documentToDomainObject = (_: SimplePage): SimplePage => {
+    const page = _.payload.doc.data();
     const id = _.payload.doc.id;
-    return { id, ...data };
+    return { id, ...page };
   }
-  private documentSnapshotToDomainObject = (_: any) => {
-    console.log('snap2domain', _);
-    const data = _.payload.data();
+  private documentSnapshotToDomainObject = (_: SimplePage): SimplePage => {
+    const page = _.payload.data();
     const id = _.payload.id;
-    return { id, ...data };
+    return { id, ...page };
   }
 
-  private mutations(database: any) {
+  private mutations(database: Array<SimplePage>) {
     return database;
   }
 
-  private updateView(database: Array<any>) {
+  private updateView(database: Array<SimplePage>) {
     this.database$.next(database.reverse());
   }
 
@@ -101,10 +108,25 @@ export function Container(collection: string, docRef?: string): PropertyDecorato
     let authService: AuthService;
     HOOKS.forEach((hook) => {
       if (hook === 'ngOnInit') {
-        console.log('hiddenOnInitHookFire', hook);
         const selfOnInit = constructor.prototype[hook];
-        let storedSubject: ReplaySubject<Array<any>> = new ReplaySubject(1);
-        let storedModel: Array<any>;
+        let storedSubject: ReplaySubject<Array<SimplePage>> = new ReplaySubject(1);
+        let storedPage: Array<SimplePage>;
+
+        storedSubject.subscribe((changes) => {
+          let current: Array<SimplePage> = [];
+          databaseService.database$
+            .subscribe(database => current = database);
+          if (current !== changes) {
+            changes.forEach(page => {
+              const next: SimplePage = {
+                ...current.find((obj: SimplePage) => obj.id === page.id),
+                ...page
+              };
+              console.log('attempt to change', next);
+              databaseService.save(page);
+            });
+          }
+        });
 
         Object.defineProperty(target, propertyKey, {
           configurable: true,
@@ -112,15 +134,11 @@ export function Container(collection: string, docRef?: string): PropertyDecorato
           get: () => {
             return storedSubject;
           },
-          set: (newData) => {
-            storedModel = Array.isArray(newData) ? newData : [newData];
-            storedSubject.next(storedModel);
-            console.log('setter init', newData);
-            if (storedModel.length === 1) {
-              // Used to save first page in the container...
-              // Replace with a init page?
-              databaseService.save(newData);
-            }
+          set: (page) => {
+            if (storedPage === page) { return; }
+            storedPage = Array.isArray(page) ? page : [page];
+            storedSubject.next(storedPage);
+            console.log('setter init', page);
           }
         });
 
@@ -136,29 +154,18 @@ export function Container(collection: string, docRef?: string): PropertyDecorato
           databaseService = service.get(DatabaseService);
           databaseService.bootstrap(collection, docRef);
           databaseService.database$
-            .subscribe((model: any) => {
-              console.log('model', model);
+            .subscribe((model: SimplePage) => {
               if (model) {
-
-                storedModel = Array.isArray(model) ? model : [model];
-                storedSubject.next(storedModel);
-                console.log('distinct change', model, storedModel, storedSubject);
+                storedPage = Array.isArray(model) ? model : [model];
+                storedSubject.next(storedPage);
                 Object.defineProperty(target, propertyKey, {
                   configurable: true,
                   enumerable: true,
                   get: () => {
                     return storedSubject;
                   },
-                  set: (newData) => {
-                    console.log('newData', newData);
-                    if (storedModel === newData) { return; }
-                    databaseService.save(newData);
-                    let current: any = [];
-                    databaseService.database$
-                      .subscribe(database => current = database);
-
-                    const next = { ...current.find((obj: any) => obj.id === newData.id), newData };
-                    databaseService.database$.next(next);
+                  set: (page) => {
+                    if (storedPage === page) { return; }
                   }
                 });
               }

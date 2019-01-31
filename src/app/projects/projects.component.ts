@@ -13,10 +13,10 @@ import { ReplaySubject } from 'rxjs';
 export class ProjectComponent {
 
   @Container(`users/$uid$/projects`)
-  public projects: ReplaySubject<ProjectModel[]>;
+  public projects: ReplaySubject<Array<ProjectModel>>;
   constructor(private modal: SkyModalService) { }
-  public remove(id) {
-    this.projects = { 'id': id };
+  public remove(id: string) {
+    this.projects.next([{ 'id': id }]);
   }
   // Skyux Modal with a form inside.
   public openModal(project?: ProjectModel) {
@@ -33,8 +33,7 @@ export class ProjectComponent {
       .closed.subscribe((result: SkyModalCloseArgs) => {
         if (result.reason === 'save') {
           const modal = new ProjectModel();
-          console.log('modal', modal);
-          this.projects = { ...modal, ...result.data };
+          this.projects.next([{ ...modal, ...result.data }]);
         }
       });
   }

@@ -14,7 +14,7 @@ import { ReplaySubject } from 'rxjs';
 export class TaskComponent {
 
   @Container(`users/$uid$/tasks`)
-  public tasks: ReplaySubject<TaskModel[]>;
+  public tasks: ReplaySubject<Array<TaskModel>>;
   constructor(private modal: SkyModalService) { }
 
   // Skyux Modal with a form inside.
@@ -32,7 +32,7 @@ export class TaskComponent {
       .closed.subscribe((result: SkyModalCloseArgs) => {
         if (result.reason === 'save') {
           const modal = new TaskModel();
-          this.tasks = { ...modal, ...result.data };
+          this.tasks.next([{ ...modal, ...result.data }]);
         }
       });
   }
