@@ -1,6 +1,6 @@
 <sky-tile-dashboard>
   <table>
-    <tr *ngFor="let project of projects">
+    <tr *ngFor="let project of projects | async">
       <td>
           <uapi-project-view projectName="{{project.name}}" projectId="{{project.id}}"></uapi-project-view>
       </td>

@@ -3,6 +3,8 @@ import { AngularFirestore, AngularFirestoreCollection, AngularFirestoreDocument 
 import { AppExtrasModule } from '../app-extras.module';
 import { AuthService } from './auth/auth.service';
 import { ReplaySubject } from 'rxjs';
+import * as _ from 'lodash';
+
 export interface SimplePage {
   id?: string;
   [key: string]: any;
@@ -113,19 +115,18 @@ export function Container(collection: string, docRef?: string): PropertyDecorato
         let storedPage: Array<SimplePage>;
 
         storedSubject.subscribe((changes) => {
-          let current: Array<SimplePage> = [];
-          databaseService.database$
-            .subscribe(database => current = database);
-          if (current !== changes) {
-            changes.forEach(page => {
-              const next: SimplePage = {
-                ...current.find((obj: SimplePage) => obj.id === page.id),
-                ...page
+
+            changes.forEach(newPage => {
+              const currentPage: SimplePage = {
+                ...storedPage.find((obj: SimplePage) => obj.id === newPage.id)
               };
-              console.log('attempt to change', next);
-              databaseService.save(page);
+              if (!_.isEqual(newPage, currentPage)) {
+                const nextPage: SimplePage = { ...currentPage, ...newPage };
+                databaseService.save(nextPage);
+                console.log('attempt an update', nextPage);
+              }
             });
-          }
+
         });
 
         Object.defineProperty(target, propertyKey, {

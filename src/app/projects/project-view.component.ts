@@ -1,7 +1,8 @@
 import { Component, Input } from '@angular/core';
 import { DragulaService } from 'ng2-dragula/ng2-dragula';
 import { TaskModel } from '../tasks/task.model';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { Subject } from 'rxjs/Subject';
+import { Container } from '../shared/database.service';
 
 @Component({
   selector: 'uapi-project-view',
@@ -16,27 +17,23 @@ export class ProjectViewComponent {
   @Input()
   public projectName: string;
 
-  public tasks: BehaviorSubject<Array<TaskModel>> =
-    new BehaviorSubject(new Array(new TaskModel));
+  @Container(`users/$uid$/tasks`)
+  public tasks: Subject<Array<TaskModel>>;
 
   constructor(
     private dragulaService: DragulaService) {
-    /*
-        this.service.task$.subscribe(tasks => {
-          if (tasks.length >= 1) { this.tasks.next(tasks); }
-        });
-    */
+
     this.dragulaService.drag.subscribe((value: any) => {
       // console.log(`drag: ${value[0]}`); // value[0] will always be bag name
       this.onDrag(value.slice(1));
     });
     this.dragulaService.drop.subscribe((value: any) => {
-      // console.log(`drop: ${value[0]}`);
       this.onDrop(value.slice(1));
-      let [projectId, element] = value;
-      let status = element.parentElement.dataset.column;
-      let taskid = element.dataset.taskId;
-      // this.service.update(taskid, { 'status': status }, { 'projectId': projectId });
+      const [projectId, element] = value;
+      const status = element.parentElement.dataset.column;
+      const taskId = element.dataset.taskId;
+      const partialPageUpdate = { 'id': taskId, 'status': status, 'projectId': projectId } as TaskModel;
+      this.tasks.next([partialPageUpdate]);
     });
     this.dragulaService.over.subscribe((value: any) => {
       // console.log(`over: ${value[0]}`);
