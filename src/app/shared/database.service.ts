@@ -39,7 +39,7 @@ export class DatabaseService {
             this.databaseDocument = this.databasesCollection.doc(this.docRef);
             this.databaseDocument.snapshotChanges()
               .map(this.documentSnapshotToDomainObject)
-              .subscribe((data) => (data.id && this.updateView([data])));
+              .subscribe((data: SimplePage) => (data.id && this.updateView([data])));
           } else {
             this.databasesCollection.snapshotChanges()
               .map(actions => actions.map(this.documentToDomainObject))

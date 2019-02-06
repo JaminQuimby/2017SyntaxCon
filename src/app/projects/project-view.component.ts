@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
 import { DragulaService } from 'ng2-dragula/ng2-dragula';
 import { TaskModel } from '../tasks/task.model';
 import { Subject } from 'rxjs/Subject';
@@ -8,7 +8,8 @@ import { Container } from '../shared/database.service';
   selector: 'uapi-project-view',
   templateUrl: './project-view.component.html',
   styleUrls: ['./project-view.component.scss'],
-  viewProviders: [DragulaService]
+  viewProviders: [DragulaService],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ProjectViewComponent {
   public readonly columns: Array<string> = ['New', 'Ready', 'In Progress', 'Review', 'Done', 'Archived'];

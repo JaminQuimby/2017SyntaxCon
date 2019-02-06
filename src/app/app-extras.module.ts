@@ -8,11 +8,11 @@ import { DragulaService, DragulaModule } from 'ng2-dragula/ng2-dragula';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { WebStorageModule } from 'ngx-store';
 import { NgModule, Injector } from '@angular/core';
-import { ProjectFormComponent } from './projects/project-form.component';
 import { ProfileService } from './shared/profile/profile.service';
 import { ProfileFormComponent } from './shared/profile/profile-form.component';
-import { TaskFormComponent } from './tasks/task-form.component';
 import { SkyAppBootstrapper } from '@blackbaud/skyux-builder/runtime/bootstrapper';
+import { FormBuilderComponent } from './shared/form-builder/form-builder.component';
+import { ModalBuilderComponent } from './shared/form-builder/modal-builder/modal-builder.component';
 
 (SkyAppBootstrapper as any).processBootstrapConfig = () => {
   return new Promise((resolve, reject) => {
@@ -56,10 +56,10 @@ const environment = {
     ProfileService
   ],
   entryComponents: [
-    TaskFormComponent,
-    ProjectFormComponent,
     ProjectViewComponent,
-    ProfileFormComponent
+    ProfileFormComponent,
+    FormBuilderComponent,
+    ModalBuilderComponent
   ]
 })
 export class AppExtrasModule {

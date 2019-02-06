@@ -1,14 +1,16 @@
 
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { SkyModalService, SkyModalCloseArgs } from '@blackbaud/skyux/dist/core';
 import { TaskModel } from './task.model';
-import { TaskFormComponent } from './task-form.component';
 import { Container } from '../shared/database.service';
 import { Subject } from 'rxjs';
+import { ModalBuilderComponent } from '../shared/form-builder/modal-builder/modal-builder.component';
+import { ModalBuilderModel } from '../shared/form-builder/modal-builder/modal-builder.model';
 
 @Component({
   selector: 'uapi-tasks',
-  templateUrl: './tasks.component.html'
+  templateUrl: './tasks.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 
 export class TaskComponent {
@@ -17,30 +19,64 @@ export class TaskComponent {
   public tasks: Subject<Array<TaskModel>>;
   constructor(private modal: SkyModalService) { }
 
-  public save(page: TaskModel) {
-    const modal = new TaskModel();
-    this.tasks.next([{ ...modal, ...page }]);
-  }
-
-  public remove(page: TaskModel) {
-    this.save({ 'id': page.id } as TaskModel);
-  }
-
   // Skyux Modal with a form inside.
   public openModal(task?: TaskModel) {
     let model = new TaskModel();
-    if (task) { model = task; }
+    model.fields = [
+      {
+        type: 'hidden',
+        name: 'id'
+      },
+      {
+        type: 'text',
+        name: 'project',
+        label: 'Project',
+        required: true
+      },
+      {
+        type: 'dropdown',
+        name: 'status',
+        label: 'Status',
+        required: true,
+        options: [
+          { key: 'New', label: 'New' },
+          { key: 'Ready', label: 'Ready' },
+          { key: 'In Progress', label: 'In Progress' },
+          { key: 'Review', label: 'Review' },
+          { key: 'Done', label: 'Done' },
+          { key: 'Archived', label: 'Archived' }
+        ]
+      },
+      {
+        type: 'text',
+        name: 'person',
+        label: 'Person'
+      },
+      {
+        type: 'text',
+        name: 'name',
+        label: 'Name'
+      },
+      {
+        type: 'text',
+        name: 'description',
+        label: 'Description'
+      }
+    ];
+    model.title = 'Tasks';
+    if (task) { model = { ...model, ...task }; }
     let windowMode: any = {
       'defaultModal': {
-        'providers': [{ provide: TaskModel, useValue: model }]
+        'providers': [{ provide: ModalBuilderModel, useValue: model }]
       }
     };
     // Make a modal Instance
     this.modal
-      .open(TaskFormComponent, windowMode['defaultModal'])
+      .open(ModalBuilderComponent, windowMode['defaultModal'])
       .closed.subscribe((result: SkyModalCloseArgs) => {
         if (result.reason === 'save') {
-          this.save(result.data);
+          const modal = new TaskModel();
+          this.tasks.next([{ ...modal, ...result.data }]);
         }
       });
   }

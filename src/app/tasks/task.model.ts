@@ -1,4 +1,6 @@
-export class TaskModel {
+import { ModalBuilderModel } from '../shared/form-builder/modal-builder/modal-builder.model';
+
+export class TaskModel extends ModalBuilderModel {
   public id?: string;
   public projectId?: string;
   public name: string;

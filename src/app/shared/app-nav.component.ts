@@ -1,10 +1,11 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { ProfileService } from '../shared/profile/profile.service';
 
 @Component({
   selector: 'app-nav',
   templateUrl: './app-nav.component.html',
-  styleUrls: ['app-nav.component.scss']
+  styleUrls: ['app-nav.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 
 export class AppNavComponent {

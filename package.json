@@ -15,7 +15,7 @@
   "author": "Jamin Quimby",
   "license": "ISC",
   "dependencies": {
-    "@blackbaud/skyux": "2.38.0",
+    "@blackbaud/skyux": "2.40.0",
     "angularfire2": "5.0.0-rc.6",
     "dragula": "3.7.2",
     "firebase": "^4.11.0",

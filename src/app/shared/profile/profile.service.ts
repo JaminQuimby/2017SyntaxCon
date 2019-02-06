@@ -9,8 +9,9 @@ export class ProfileService {
   public user$: BehaviorSubject<UserModel> = new BehaviorSubject(new UserModel());
 
   constructor(
-    private authService: AuthService,
-    private db: AngularFirestore
+    private authService: AuthService
+    // ,
+   // private db: AngularFirestore
   ) {
     this.authService.user$.subscribe(async (user: UserModel) => {
       let data: UserModel = new UserModel();

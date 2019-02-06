@@ -1,9 +1,10 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
 import { TaskModel } from './task.model';
 @Component({
   selector: 'uapi-task-view',
   templateUrl: './task-view.component.html',
-  styleUrls: ['task-view.component.scss']
+  styleUrls: ['task-view.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TaskViewComponent {
   @Input()
