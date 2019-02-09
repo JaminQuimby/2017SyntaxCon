@@ -3,5 +3,6 @@ export interface FieldBuilderInterface {
   name: string;
   label?: string;
   required?: boolean;
-  options?: { key: string, label: string }[];
+  options?: { id: string, name: string }[];
+  container?: string;
 }

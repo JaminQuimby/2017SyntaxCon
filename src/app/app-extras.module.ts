@@ -13,6 +13,7 @@ import { ProfileFormComponent } from './shared/profile/profile-form.component';
 import { SkyAppBootstrapper } from '@blackbaud/skyux-builder/runtime/bootstrapper';
 import { FormBuilderComponent } from './shared/form-builder/form-builder.component';
 import { ModalBuilderComponent } from './shared/form-builder/modal-builder/modal-builder.component';
+import { DatabaseService } from './shared/database.service';
 
 (SkyAppBootstrapper as any).processBootstrapConfig = () => {
   return new Promise((resolve, reject) => {
@@ -53,7 +54,8 @@ const environment = {
     AuthService,
     AngularFireAuth,
     DragulaService,
-    ProfileService
+    ProfileService,
+    DatabaseService
   ],
   entryComponents: [
     ProjectViewComponent,

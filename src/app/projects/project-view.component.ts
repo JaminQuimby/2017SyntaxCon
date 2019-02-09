@@ -2,7 +2,7 @@ import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
 import { DragulaService } from 'ng2-dragula/ng2-dragula';
 import { TaskModel } from '../tasks/task.model';
 import { Subject } from 'rxjs/Subject';
-import { Container } from '../shared/database.service';
+import { Container } from '../shared/database.decorator';
 
 @Component({
   selector: 'uapi-project-view',
@@ -18,7 +18,7 @@ export class ProjectViewComponent {
   @Input()
   public projectName: string;
 
-  @Container(`users/$uid$/tasks`)
+  @Container(`users/tasks`)
   public tasks: Subject<Array<TaskModel>>;
 
   constructor(

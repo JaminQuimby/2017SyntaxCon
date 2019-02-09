@@ -5,7 +5,7 @@ import * as firebase from 'firebase';
 import { Observable } from 'rxjs/Observable';
 import { AuthUserModel } from './auth.model';
 import { UserModel } from '../user/user.model';
-import { ReplaySubject } from 'rxjs';
+import { ReplaySubject } from 'rxjs/ReplaySubject';
 
 @Injectable()
 export class AuthService {

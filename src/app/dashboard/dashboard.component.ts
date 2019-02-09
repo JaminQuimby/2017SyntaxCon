@@ -1,7 +1,7 @@
 import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { SkyTileDashboardConfig } from '@blackbaud/skyux/dist/core';
 import { ProjectModel } from '../projects/project.model';
-import { Container } from '../shared/database.service';
+import { Container } from '../shared/database.decorator';
 
 @Component({
   selector: 'uapi-dashboard',
@@ -9,7 +9,7 @@ import { Container } from '../shared/database.service';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class DashboardComponent {
-  @Container('users/$uid$/projects')
+  @Container('users/projects')
   public projects: ProjectModel;
   public dashboardConfig: SkyTileDashboardConfig;
 
