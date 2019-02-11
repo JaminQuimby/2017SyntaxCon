@@ -3,7 +3,7 @@ import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { SkyModalService, SkyModalCloseArgs } from '@blackbaud/skyux/dist/core';
 import { TaskModel } from './task.model';
 import { Container } from '../shared/database.decorator';
-import { Observable } from 'rxjs';
+import { Subject } from 'rxjs';
 import { ModalBuilderComponent } from '../shared/form-builder/modal-builder/modal-builder.component';
 import { ModalBuilderModel } from '../shared/form-builder/modal-builder/modal-builder.model';
 
@@ -16,7 +16,7 @@ import { ModalBuilderModel } from '../shared/form-builder/modal-builder/modal-bu
 export class TaskComponent {
 
   @Container(`users/tasks`)
-  public tasks: Observable<Array<TaskModel>>;
+  public tasks: Subject<Array<TaskModel>>;
   constructor(private modal: SkyModalService) { }
 
   // Skyux Modal with a form inside.
@@ -32,7 +32,7 @@ export class TaskComponent {
         name: 'project',
         label: 'Project',
         required: true,
-        container: 'users/projects',
+        container: 'users/projects'
       },
       {
         type: 'dropdown',
@@ -61,19 +61,17 @@ export class TaskComponent {
       {
         type: 'text',
         name: 'description',
-        label: 'Description'
+        label: 'Description',
+        placeholder: '',
+        multiline: true
       }
     ];
     model.title = 'Tasks';
     if (task) { model = { ...model, ...task }; }
-    let windowMode: any = {
-      'defaultModal': {
-        'providers': [{ provide: ModalBuilderModel, useValue: model }]
-      }
-    };
+    const provider = { 'providers': [{ provide: ModalBuilderModel, useValue: model }] };
     // Make a modal Instance
     this.modal
-      .open(ModalBuilderComponent, windowMode['defaultModal'])
+      .open(ModalBuilderComponent, provider)
       .closed.subscribe((result: SkyModalCloseArgs) => {
         if (result.reason === 'save') {
           this.tasks.next([{ ...new TaskModel(), ...result.data }]);

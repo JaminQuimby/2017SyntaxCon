@@ -5,4 +5,6 @@ export interface FieldBuilderInterface {
   required?: boolean;
   options?: { id: string, name: string }[];
   container?: string;
+  placeholder?: string;
+  multiline?: boolean;
 }

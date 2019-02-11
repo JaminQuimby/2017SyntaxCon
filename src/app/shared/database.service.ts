@@ -88,7 +88,6 @@ export class DatabaseService {
 
   private updateView(database: Array<SimplePage>) {
     this.database$.next(database.reverse());
-    this.staleData = database.reverse();
   }
 
 }

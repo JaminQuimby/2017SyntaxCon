@@ -40,18 +40,13 @@ export class ProjectComponent {
     ];
     model.title = 'Project';
     if (project) { model = { ...model, ...project }; }
-    let windowMode: any = {
-      'defaultModal': {
-        'providers': [{ provide: ModalBuilderModel, useValue: model }]
-      }
-    };
+    const windowMode = { 'providers': [{ provide: ModalBuilderModel, useValue: model }] };
     // Make a modal Instance
     this.modal
-      .open(ModalBuilderComponent, windowMode['defaultModal'])
+      .open(ModalBuilderComponent, windowMode)
       .closed.subscribe((result: SkyModalCloseArgs) => {
         if (result.reason === 'save') {
-          const modal = new ProjectModel();
-          this.projects.next([{ ...modal, ...result.data }]);
+          this.projects.next([{ ...new ProjectModel(), ...result.data }]);
         }
       });
   }
