@@ -23,6 +23,9 @@
       "firebase"
     ]
   },
+  "angularCompilerOptions": {
+    "preserveWhitespaces": true
+  },
   "exclude": [
     "node_modules"
   ],

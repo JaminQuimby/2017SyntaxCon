@@ -1,9 +1,13 @@
 {
+  "$schema": "./node_modules/@skyux/config/skyuxconfig-schema.json",
   "app": {
-    "title": "UAPI"
+    "title": "UAPI",
+    "styles": [
+      "@skyux/theme/css/sky.css"
+    ]
   },
   "mode": "easy",
   "compileMode": "aot",
-  "name":"",
+  "name": "",
   "omnibar": false
 }

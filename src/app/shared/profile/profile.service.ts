@@ -11,7 +11,7 @@ export class ProfileService {
   constructor(
     private authService: AuthService
     // ,
-   // private db: AngularFirestore
+    // private db: AngularFirestore
   ) {
     this.authService.user$.subscribe(async (user: UserModel) => {
       let data: UserModel = new UserModel();
@@ -21,14 +21,14 @@ export class ProfileService {
       data.photoURL = user.photoURL;
       data.phoneNumber = user.phoneNumber;
       if (user.uid) {
-       // let lookupUser = await this.authService.lookupUserBy(user.uid);
-      //  if (lookupUser) {
-          // this.user$.next(lookupUser);
-     //   } else {
-          // this.user$.next({ 'role': 'admin', ...data });
-          // this.db.collection(`/users`).doc(user.uid)
-          //   .set(Object.assign({}, this.user$.getValue()));
-     //   }
+        // let lookupUser = await this.authService.lookupUserBy(user.uid);
+        //  if (lookupUser) {
+        // this.user$.next(lookupUser);
+        //   } else {
+        // this.user$.next({ 'role': 'admin', ...data });
+        // this.db.collection(`/users`).doc(user.uid)
+        //   .set(Object.assign({}, this.user$.getValue()));
+        //   }
       }
     });
   }

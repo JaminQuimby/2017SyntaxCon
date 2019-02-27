@@ -1,5 +1,9 @@
 import { Component, ChangeDetectionStrategy } from '@angular/core';
-import { SkyTileDashboardConfig } from '@blackbaud/skyux/dist/core';
+
+import {
+  SkyTileDashboardConfig
+} from '@skyux/tiles';
+
 import { ProjectModel } from '../projects/project.model';
 import { Container } from '../shared/database.decorator';
 

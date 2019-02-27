@@ -3,22 +3,24 @@ import { AngularFirestore, AngularFirestoreCollection, AngularFirestoreDocument 
 import { SimplePage } from './database.interface';
 
 import { AuthService } from './auth/auth.service';
-import { ReplaySubject, Observable } from 'rxjs';
+import { ReplaySubject, Observable, from } from 'rxjs';
 import * as _ from 'lodash';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class DatabaseService {
   public databasesCollection: AngularFirestoreCollection<any>;
   public databaseDocument: AngularFirestoreDocument<any>;
   public databasesDocument: AngularFirestoreDocument<{}>;
-  private database$: ReplaySubject<Array<SimplePage>> = new ReplaySubject(1);
+  public database$: ReplaySubject<Array<SimplePage>> = new ReplaySubject(1);
   private collection: string;
   private docRef: string;
   constructor(private db: AngularFirestore, private auth: AuthService) { }
 
   public async openContainer(collection: string, docRef?: string) {
 
-    console.log('openContainer', collection, docRef);
+    // console.log('openContainer', collection, docRef);
     this.auth.user$.subscribe((user) => {
       if (user) {
         collection = collection && collection.replace('users/', `users/${user.uid}/`);
@@ -46,7 +48,7 @@ export class DatabaseService {
   }
 
   public get database() {
-    return Observable.from(this.database$);
+    return from(this.database$);
   }
 
   public save({ id, ...params }: any) {
@@ -71,14 +73,14 @@ export class DatabaseService {
     this.databasesCollection.doc(id).update(params);
   }
 
-  private documentToDomainObject = (_: SimplePage): SimplePage => {
-    const page = _.payload.doc.data();
-    const id = _.payload.doc.id;
+  private documentToDomainObject = (simplePage: SimplePage): SimplePage => {
+    const page = simplePage.payload.doc.data();
+    const id = simplePage.payload.doc.id;
     return { id, ...page };
   }
-  private documentSnapshotToDomainObject = (_: SimplePage): SimplePage => {
-    const page = _.payload.data();
-    const id = _.payload.id;
+  private documentSnapshotToDomainObject = (simplePage: SimplePage): SimplePage => {
+    const page = simplePage.payload.data();
+    const id = simplePage.payload.id;
     return { id, ...page };
   }
 

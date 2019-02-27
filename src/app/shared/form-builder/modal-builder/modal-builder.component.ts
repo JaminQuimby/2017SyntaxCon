@@ -1,5 +1,9 @@
 import { Component, ChangeDetectionStrategy } from '@angular/core';
-import { SkyModalInstance } from '@blackbaud/skyux/dist/core';
+
+import {
+  SkyModalInstance
+} from '@skyux/modals';
+
 import { FieldBuilderInterface } from '../field-builder/field-builder.interface';
 import { ModalBuilderModel } from './modal-builder.model';
 

@@ -14,6 +14,9 @@ import { SkyAppBootstrapper } from '@blackbaud/skyux-builder/runtime/bootstrappe
 import { FormBuilderComponent } from './shared/form-builder/form-builder.component';
 import { ModalBuilderComponent } from './shared/form-builder/modal-builder/modal-builder.component';
 import { DatabaseService } from './shared/database.service';
+import { BuilderAnchorComponent } from './shared/form-builder/builder-anchor.component';
+import { BuilderAnchorDirective } from './shared/form-builder/builder-anchor.directive';
+import { FirestoreSettingsToken} from '@angular/fire/firestore';
 
 (SkyAppBootstrapper as any).processBootstrapConfig = () => {
   return new Promise((resolve, reject) => {
@@ -38,6 +41,10 @@ const environment = {
   }
 };
 // Specify entry components, module-level providers, etc. here.
+import {
+  AppSkyModule
+} from './app-sky.module';
+
 @NgModule({
   imports: [
     AngularFireModule.initializeApp(environment.firebase),
@@ -46,28 +53,32 @@ const environment = {
     DragulaModule,
     FormsModule,
     ReactiveFormsModule,
-    WebStorageModule,
-    AngularFirestoreModule
+    WebStorageModule
   ],
-  exports: [DragulaModule],
+  exports: [
+    AppSkyModule, DragulaModule, BuilderAnchorDirective],
+  declarations: [
+    BuilderAnchorDirective
+  ],
   providers: [
     AuthService,
     AngularFireAuth,
     DragulaService,
     ProfileService,
-    DatabaseService
+    DatabaseService,
+    { provide: FirestoreSettingsToken, useValue: {} }
   ],
   entryComponents: [
     ProjectViewComponent,
     ProfileFormComponent,
     FormBuilderComponent,
-    ModalBuilderComponent
+    ModalBuilderComponent,
+    BuilderAnchorComponent
   ]
 })
 export class AppExtrasModule {
   public static injector: Injector;
   constructor(private injector: Injector, private db: AngularFirestore) {
-    this.db.firestore.settings({ timestampsInSnapshots: true });
     this.db.firestore.enablePersistence();
     AppExtrasModule.injector = this.injector;
 

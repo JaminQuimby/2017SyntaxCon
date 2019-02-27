@@ -1,7 +1,7 @@
 import { Component, Input, ChangeDetectionStrategy, OnInit, OnDestroy } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { DatabaseService } from '../../database.service';
-import { Observable } from 'rxjs';
+import { Observable, from, of } from 'rxjs';
 import { SimplePage } from '../../database.interface';
 @Component({
   selector: 'drop-down',
@@ -27,13 +27,13 @@ export class DropDownComponent implements OnInit {
   constructor(protected db: DatabaseService) { }
 
   public async ngOnInit() {
-    this.options = Observable.from([]);
+    this.options = from([]);
     console.log('ngOnInit');
     if (this.field.container && this.field.options === undefined) {
       this.db.openContainer(this.field.container);
-      this.options = Observable.from(this.db.database);
+      this.options = from(this.db.database);
     } else {
-      this.options = Observable.of(this.field.options);
+      this.options = of(this.field.options);
     }
   }
 }

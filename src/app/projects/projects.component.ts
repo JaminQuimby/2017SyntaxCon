@@ -1,5 +1,10 @@
 import { Component, ChangeDetectionStrategy } from '@angular/core';
-import { SkyModalService, SkyModalCloseArgs } from '@blackbaud/skyux/dist/core';
+
+import {
+  SkyModalCloseArgs,
+  SkyModalService
+} from '@skyux/modals';
+
 import { ProjectModel } from './project.model';
 import { Container } from '../shared/database.decorator';
 import { Subject } from 'rxjs';
