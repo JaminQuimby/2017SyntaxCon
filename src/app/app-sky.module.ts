@@ -41,6 +41,9 @@ import {
   SkyTilesModule
 } from '@skyux/tiles';
 
+import {
+  SkyNavbarModule
+} from '@skyux/navbar';
 @NgModule({
   exports: [
     SkyCheckboxModule,
@@ -54,7 +57,8 @@ import {
     SkyModalModule,
     SkyPageSummaryModule,
     SkyRadioModule,
-    SkyTilesModule
+    SkyTilesModule,
+    SkyNavbarModule
   ]
 })
 export class AppSkyModule { }

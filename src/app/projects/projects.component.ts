@@ -1,19 +1,13 @@
 import { Component, ChangeDetectionStrategy } from '@angular/core';
-
-import {
-  SkyModalCloseArgs,
-  SkyModalService
-} from '@skyux/modals';
-
 import { ProjectModel } from './project.model';
 import { Container } from '../shared/database.decorator';
 import { Subject } from 'rxjs';
-import { ModalBuilderComponent } from '../shared/form-builder/modal-builder/modal-builder.component';
-import { ModalBuilderModel } from '../shared/form-builder/modal-builder/modal-builder.model';
+import { BuilderAnchorItem } from '../shared/form-builder/builder-anchor.items';
+import { BuilderAnchorComponent } from '../shared/form-builder/builder-anchor.component';
 
 @Component({
   selector: 'uapi-projects',
-  templateUrl: './projects.component.html',
+  template: '<uapi-builder [anchors]="anchors"></uapi-builder>',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 
@@ -21,12 +15,11 @@ export class ProjectComponent {
 
   @Container(`users/projects`)
   public projects: Subject<Array<ProjectModel>>;
-  constructor(private modal: SkyModalService) { }
+  public anchors: BuilderAnchorItem[] = [];
+  constructor() {
 
-  // Skyux Modal with a form inside.
-  public openModal(project?: ProjectModel) {
     let model: ProjectModel = new ProjectModel();
-    model.fields = [
+    model._fields = [
       {
         type: 'text',
         name: 'name',
@@ -44,15 +37,9 @@ export class ProjectComponent {
       }
     ];
     model.title = 'Project';
-    if (project) { model = { ...model, ...project }; }
-    const windowMode = { 'providers': [{ provide: ModalBuilderModel, useValue: model }] };
-    // Make a modal Instance
-    this.modal
-      .open(ModalBuilderComponent, windowMode)
-      .closed.subscribe((result: SkyModalCloseArgs) => {
-        if (result.reason === 'save') {
-          this.projects.next([{ ...new ProjectModel(), ...result.data }]);
-        }
-      });
+    this.projects.subscribe((s) => { console.log('projects', s); });
+
+    const anchor = new BuilderAnchorItem(BuilderAnchorComponent, model, this.projects);
+    this.anchors.push(anchor);
   }
 }

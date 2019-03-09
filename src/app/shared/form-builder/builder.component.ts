@@ -1,4 +1,4 @@
-import { Component, ComponentFactoryResolver, ViewChild, Input, AfterViewInit, OnDestroy, ViewContainerRef } from '@angular/core';
+import { Component, ComponentFactoryResolver, ViewChild, Input, OnDestroy, ViewContainerRef, OnInit } from '@angular/core';
 import { BuilderAnchorDirective } from './builder-anchor.directive';
 import { BuilderAnchorComponent } from './builder-anchor.component';
 import { BuilderAnchorItem } from './builder-anchor.items';
@@ -16,46 +16,26 @@ export class BuilderComponent implements OnInit, OnDestroy {
 
   public interval: any;
 
-  constructor(private factory: ComponentFactoryResolver) { }
+  constructor(private resolver: ComponentFactoryResolver) { }
 
   public loadComponent() {
-    console.log(this.anchorHost);
-    let model = {
-      model: {
-        fields: [
-          {
-            type: 'text',
-            name: 'name',
-            label: 'Test Name',
-            required: true
-          },
-          {
-            type: 'text',
-            name: 'description',
-            label: 'Test'
-          },
-          {
-            type: 'hidden',
-            name: 'id'
-          }
-        ]
-      }
-    };
-
     this.currentAnchorIndex = (this.currentAnchorIndex + 1) % this.anchors.length;
     let item = this.anchors[this.currentAnchorIndex];
-    let componentFactory = this.factory.resolveComponentFactory(item.component);
+    let componentFactory = this.resolver.resolveComponentFactory(item.component);
     let viewContainerRef: ViewContainerRef = this.anchorHost.viewContainerRef;
     viewContainerRef.clear();
-
     let componentRef = viewContainerRef.createComponent(componentFactory);
-    (<BuilderAnchorComponent>componentRef.instance).model = model;
+    (<BuilderAnchorComponent>componentRef.instance).model = item.model;
+    (<BuilderAnchorComponent>componentRef.instance).data = item.data;
+    item.data.subscribe((s) => { console.log(s); })
 
   }
 
   public ngOnInit(): void {
     this.loadComponent();
-    console.log(this.anchorHost);
   }
-  public ngOnDestroy(): void { clearInterval(this.interval); }
+
+  public ngOnDestroy(): void {
+    clearInterval(this.interval);
+  }
 }

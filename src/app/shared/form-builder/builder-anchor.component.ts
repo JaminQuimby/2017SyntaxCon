@@ -1,11 +1,11 @@
-import { Component, ChangeDetectionStrategy, ComponentFactoryResolver, Input } from '@angular/core';
+import { Component, ChangeDetectionStrategy, Input } from '@angular/core';
 
 import {
   SkyModalCloseArgs,
   SkyModalService
 } from '@skyux/modals';
 
-import { Container } from '../database.decorator';
+// import { Container } from '../database.decorator';
 import { Subject } from 'rxjs';
 import { ModalBuilderComponent } from '../form-builder/modal-builder/modal-builder.component';
 import { ModalBuilderModel } from '../form-builder/modal-builder/modal-builder.model';
@@ -18,41 +18,29 @@ import { ModalBuilderModel } from '../form-builder/modal-builder/modal-builder.m
 
 export class BuilderAnchorComponent {
   @Input()
-  public model: Subject<Array<any>>;
+  public data: Subject<Array<any>>;
+  @Input()
+  public model: any;
 
-  constructor(private modal: SkyModalService, private factory: ComponentFactoryResolver) {
-    console.log('anchor');
+  constructor(private modal: SkyModalService) { }
+
+  public get columns() {
+    return this.model._fields.filter((field) => {
+      return field.type !== 'hidden';
+    });
   }
-
   // Skyux Modal with a form inside.
-  public openModal(anchor?: any) {
-    let model: any;
-    model.fields = [
-      {
-        type: 'text',
-        name: 'name',
-        label: 'builder-anchor Name',
-        required: true
-      },
-      {
-        type: 'text',
-        name: 'description',
-        label: 'Description'
-      },
-      {
-        type: 'hidden',
-        name: 'id'
-      }
-    ];
-    model.title = 'builder-anchor';
-    if (anchor) { model = { ...model, ...anchor }; }
+  public openModal(row: any) {
+    let model = this.model;
+    if (row) { model = { ...this.model, ...row }; }
     const windowMode = { 'providers': [{ provide: ModalBuilderModel, useValue: model }] };
     // Make a modal Instance
     this.modal
       .open(ModalBuilderComponent, windowMode)
       .closed.subscribe((result: SkyModalCloseArgs) => {
         if (result.reason === 'save') {
-          this.model.next([{ ...result.data }]);
+          delete result.data._fields;
+          this.data.next([{ ...result.data }]);
         }
       });
   }

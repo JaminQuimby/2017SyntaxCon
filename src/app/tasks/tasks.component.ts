@@ -1,32 +1,23 @@
 import { Component, ChangeDetectionStrategy } from '@angular/core';
-
-import {
-  SkyModalCloseArgs,
-  SkyModalService
-} from '@skyux/modals';
-
 import { TaskModel } from './task.model';
 import { Container } from '../shared/database.decorator';
 import { Subject } from 'rxjs';
-import { ModalBuilderComponent } from '../shared/form-builder/modal-builder/modal-builder.component';
-import { ModalBuilderModel } from '../shared/form-builder/modal-builder/modal-builder.model';
+import { BuilderAnchorItem } from '../shared/form-builder/builder-anchor.items';
+import { BuilderAnchorComponent } from '../shared/form-builder/builder-anchor.component';
 
 @Component({
   selector: 'uapi-tasks',
-  templateUrl: './tasks.component.html',
+  template: '<uapi-builder [anchors]="anchors"></uapi-builder>',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 
 export class TaskComponent {
-
   @Container(`users/tasks`)
   public tasks: Subject<Array<TaskModel>>;
-  constructor(private modal: SkyModalService) { }
-
-  // Skyux Modal with a form inside.
-  public openModal(task?: TaskModel) {
+  public anchors: BuilderAnchorItem[] = [];
+  constructor() {
     let model = new TaskModel();
-    model.fields = [
+    model._fields = [
       {
         type: 'hidden',
         name: 'id'
@@ -70,16 +61,9 @@ export class TaskComponent {
         multiline: true
       }
     ];
-    model.title = 'Tasks';
-    if (task) { model = { ...model, ...task }; }
-    const provider = { 'providers': [{ provide: ModalBuilderModel, useValue: model }] };
-    // Make a modal Instance
-    this.modal
-      .open(ModalBuilderComponent, provider)
-      .closed.subscribe((result: SkyModalCloseArgs) => {
-        if (result.reason === 'save') {
-          this.tasks.next([{ ...new TaskModel(), ...result.data }]);
-        }
-      });
+    model.title = 'Task';
+    const anchor = new BuilderAnchorItem(BuilderAnchorComponent, model, this.tasks);
+    this.anchors.push(anchor);
   }
+
 }

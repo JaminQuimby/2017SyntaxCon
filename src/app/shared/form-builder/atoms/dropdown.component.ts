@@ -1,4 +1,4 @@
-import { Component, Input, ChangeDetectionStrategy, OnInit, OnDestroy } from '@angular/core';
+import { Component, Input, ChangeDetectionStrategy, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { DatabaseService } from '../../database.service';
 import { Observable, from, of } from 'rxjs';

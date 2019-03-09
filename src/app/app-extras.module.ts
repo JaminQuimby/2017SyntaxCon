@@ -4,13 +4,13 @@ import { AngularFirestoreModule, AngularFirestore } from 'angularfire2/firestore
 import { AngularFireModule } from 'angularfire2';
 import { AuthService } from './shared/auth/auth.service';
 import { ProjectViewComponent } from './projects/project-view.component';
-import { DragulaService, DragulaModule } from 'ng2-dragula/ng2-dragula';
+import { DragulaService, DragulaModule } from 'ng2-dragula';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { WebStorageModule } from 'ngx-store';
 import { NgModule, Injector } from '@angular/core';
 import { ProfileService } from './shared/profile/profile.service';
 import { ProfileFormComponent } from './shared/profile/profile-form.component';
-import { SkyAppBootstrapper } from '@blackbaud/skyux-builder/runtime/bootstrapper';
+import { SkyAppBootstrapper } from '@skyux-sdk/builder/runtime/bootstrapper';
 import { FormBuilderComponent } from './shared/form-builder/form-builder.component';
 import { ModalBuilderComponent } from './shared/form-builder/modal-builder/modal-builder.component';
 import { DatabaseService } from './shared/database.service';

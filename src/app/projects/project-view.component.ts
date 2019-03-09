@@ -1,8 +1,9 @@
-import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
-import { DragulaService } from 'ng2-dragula/ng2-dragula';
+import { Component, Input, ChangeDetectionStrategy, OnDestroy } from '@angular/core';
+import { DragulaService } from 'ng2-dragula';
 import { TaskModel } from '../tasks/task.model';
 import { Subject } from 'rxjs/Subject';
 import { Container } from '../shared/database.decorator';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'uapi-project-view',
@@ -11,39 +12,51 @@ import { Container } from '../shared/database.decorator';
   viewProviders: [DragulaService],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ProjectViewComponent {
+export class ProjectViewComponent implements OnDestroy {
   public readonly columns: Array<string> = ['New', 'Ready', 'In Progress', 'Review', 'Done', 'Archived'];
   @Input()
   public projectId: string;
   @Input()
   public projectName: string;
-
+  public subs = new Subscription();
   @Container(`users/tasks`)
   public tasks: Subject<Array<TaskModel>>;
 
   constructor(
     private dragulaService: DragulaService) {
+/*
+    dragulaService.createGroup('PROJECT', {
+      removeOnSpill: true
+    });
+*/
+    this.subs.add(
+      this.dragulaService.drag.subscribe((value: any) => {
+        // console.log(`drag: ${value[0]}`); // value[0] will always be bag name
+        this.onDrag(value.slice(1));
+      }));
+    this.subs.add(
+      this.dragulaService.drop.subscribe((value: any) => {
+        this.onDrop(value.slice(1));
+        const [projectId, element] = value;
+        const status = element.parentElement.dataset.column;
+        const taskId = element.dataset.taskId;
+        const partialPageUpdate = { 'id': taskId, 'status': status, 'projectId': projectId } as TaskModel;
+        this.tasks.next([partialPageUpdate]);
+      }));
+    this.subs.add(
+      this.dragulaService.over.subscribe((value: any) => {
+        // console.log(`over: ${value[0]}`);
+        this.onOver(value.slice(1));
+      }));
+    this.subs.add(
+      this.dragulaService.out.subscribe((value: any) => {
+        // console.log(`out: ${value[0]}`);
+        this.onOut(value.slice(1));
+      }));
+  }
 
-    this.dragulaService.drag.subscribe((value: any) => {
-      // console.log(`drag: ${value[0]}`); // value[0] will always be bag name
-      this.onDrag(value.slice(1));
-    });
-    this.dragulaService.drop.subscribe((value: any) => {
-      this.onDrop(value.slice(1));
-      const [projectId, element] = value;
-      const status = element.parentElement.dataset.column;
-      const taskId = element.dataset.taskId;
-      const partialPageUpdate = { 'id': taskId, 'status': status, 'projectId': projectId } as TaskModel;
-      this.tasks.next([partialPageUpdate]);
-    });
-    this.dragulaService.over.subscribe((value: any) => {
-      // console.log(`over: ${value[0]}`);
-      this.onOver(value.slice(1));
-    });
-    this.dragulaService.out.subscribe((value: any) => {
-      // console.log(`out: ${value[0]}`);
-      this.onOut(value.slice(1));
-    });
+  public ngOnDestroy() {
+    this.subs.unsubscribe();
   }
 
   private hasClass(el: any, name: string): any {

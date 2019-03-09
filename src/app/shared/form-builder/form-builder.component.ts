@@ -6,7 +6,7 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <form (change)="onChange.emit(this.form.value)" [formGroup]="form" class="form-horizontal">
-      <div *ngFor="let field of model.fields">
+      <div *ngFor="let field of model._fields">
           <field-builder [field]="field" [form]="form"></field-builder>
       </div>
     </form>
@@ -23,7 +23,7 @@ export class FormBuilderComponent implements OnInit {
   public ngOnInit() {
     const model = this.model;
     let fieldsControls: { [key: string]: FormControl | FormGroup } = {};
-    for (let f of this.model.fields) {
+    for (let f of this.model._fields) {
       if (f.type !== 'checkbox') {
         const name = f.name;
         fieldsControls[name] = new FormControl(model[name] || '', Validators.required);

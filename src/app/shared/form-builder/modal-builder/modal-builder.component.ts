@@ -14,13 +14,13 @@ import { ModalBuilderModel } from './modal-builder.model';
 })
 export class ModalBuilderComponent {
 
-  public fields: FieldBuilderInterface[];
-  public title: string;
+  public _fields: FieldBuilderInterface[];
+  public _title: string;
   constructor(
     public model: ModalBuilderModel,
     public instance: SkyModalInstance) {
-    this.fields = this.model.fields;
-    this.title = this.model.title;
+    this._fields = this.model._fields;
+    this._title = this.model._title;
 
   }
 

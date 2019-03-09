@@ -11,8 +11,6 @@ import { UserModel } from './shared/user/user.model';
 
 export class HomeComponent {
   public model: UserModel;
-  private email: string;
-  private password: string;
 
   constructor(
     private auth: AuthService,
@@ -25,7 +23,7 @@ export class HomeComponent {
 
   public login() {
     this.auth.login_google();
-    this.email = this.password = '';
+
   }
 
   public logout() {

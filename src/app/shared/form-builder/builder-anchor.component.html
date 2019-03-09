@@ -1,5 +1,5 @@
-<h1>Project List</h1>
-<sky-list [data]="projects" [defaultView]="grid">
+<h1>{{model.title}} List</h1>
+<sky-list [data]="data" [defaultView]="grid">
   <sky-list-toolbar>
 
     <sky-list-secondary-actions>
@@ -16,9 +16,9 @@
   <sky-list-view-grid fit="scroll" #grid>
     <sky-grid-column field="id" heading="" description="row id" hidden="true"></sky-grid-column>
     <sky-grid-column field="composite" [template]="contextMenu"></sky-grid-column>
-
-    <sky-grid-column field="name" heading="Name" description="A project name"></sky-grid-column>
-    <sky-grid-column field="description" heading="Description" description="A description"> </sky-grid-column>
+    <ng-container *ngFor="let column of columns">
+      <sky-grid-column field="{{column.name}}" heading="{{column.label}}" > </sky-grid-column>
+    </ng-container>
   </sky-list-view-grid>
 </sky-list>
 

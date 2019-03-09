@@ -3,7 +3,7 @@ import { AngularFirestore, AngularFirestoreCollection, AngularFirestoreDocument 
 import { SimplePage } from './database.interface';
 
 import { AuthService } from './auth/auth.service';
-import { ReplaySubject, Observable, from } from 'rxjs';
+import { ReplaySubject, from } from 'rxjs';
 import * as _ from 'lodash';
 
 @Injectable({
@@ -70,6 +70,7 @@ export class DatabaseService {
   }
 
   private update({ id, ...params }: SimplePage) {
+    console.log('params', params);
     this.databasesCollection.doc(id).update(params);
   }
 

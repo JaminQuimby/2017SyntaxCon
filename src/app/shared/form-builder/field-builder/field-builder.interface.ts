@@ -7,4 +7,5 @@ export interface FieldBuilderInterface {
   container?: string;
   placeholder?: string;
   multiline?: boolean;
+  description?: string;
 }
