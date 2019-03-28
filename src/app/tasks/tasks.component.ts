@@ -16,8 +16,8 @@ export class TaskComponent {
   public tasks: Subject<Array<TaskModel>>;
   public anchors: BuilderAnchorItem[] = [];
   constructor() {
-    let model = new TaskModel();
-    model._fields = [
+    let dataModel = new TaskModel();
+    dataModel.fields = [
       {
         type: 'hidden',
         name: 'id'
@@ -61,8 +61,8 @@ export class TaskComponent {
         multiline: true
       }
     ];
-    model.title = 'Task';
-    const anchor = new BuilderAnchorItem(BuilderAnchorComponent, model, this.tasks);
+    let pageConfig = { 'title': 'Task' };
+    const anchor = new BuilderAnchorItem(BuilderAnchorComponent, dataModel, this.tasks, pageConfig);
     this.anchors.push(anchor);
   }
 

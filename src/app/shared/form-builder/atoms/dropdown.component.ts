@@ -9,9 +9,10 @@ import { SimplePage } from '../../database.interface';
   template: `
       <div [formGroup]="form">
         <select class="sky-form-group sky-form-control"
+          [compareWith]="compareById"
           [id]="field.name"
           [formControlName]="field.name">
-          <option *ngFor="let opt of options | async" [ngValue]="opt.id">{{opt.name}}</option>
+          <option *ngFor="let opt of options | async" [ngValue]="{'id':opt.id,'name':opt.name}">{{opt.name}}</option>
         </select>
       </div>
       `
@@ -28,12 +29,18 @@ export class DropDownComponent implements OnInit {
 
   public async ngOnInit() {
     this.options = from([]);
-    console.log('ngOnInit');
     if (this.field.container && this.field.options === undefined) {
       this.db.openContainer(this.field.container);
       this.options = from(this.db.database);
     } else {
       this.options = of(this.field.options);
     }
+  }
+
+  public compareById(option1: any, option2: any) {
+    if (option1 === undefined || option2 === undefined) {
+      return false;
+    }
+    return option1.id === option2.id;
   }
 }

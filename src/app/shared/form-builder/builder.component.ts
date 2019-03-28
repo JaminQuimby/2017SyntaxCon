@@ -25,10 +25,9 @@ export class BuilderComponent implements OnInit, OnDestroy {
     let viewContainerRef: ViewContainerRef = this.anchorHost.viewContainerRef;
     viewContainerRef.clear();
     let componentRef = viewContainerRef.createComponent(componentFactory);
-    (<BuilderAnchorComponent>componentRef.instance).model = item.model;
+    (<BuilderAnchorComponent>componentRef.instance).dataModel = item.dataModel;
     (<BuilderAnchorComponent>componentRef.instance).data = item.data;
-    item.data.subscribe((s) => { console.log(s); })
-
+    (<BuilderAnchorComponent>componentRef.instance).pageConfig = item.pageConfig;
   }
 
   public ngOnInit(): void {

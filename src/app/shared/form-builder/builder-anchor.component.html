@@ -1,4 +1,4 @@
-<h1>{{model.title}} List</h1>
+<h1>{{title}} List</h1>
 <sky-list [data]="data" [defaultView]="grid">
   <sky-list-toolbar>
 
@@ -17,13 +17,12 @@
     <sky-grid-column field="id" heading="" description="row id" hidden="true"></sky-grid-column>
     <sky-grid-column field="composite" [template]="contextMenu"></sky-grid-column>
     <ng-container *ngFor="let column of columns">
-      <sky-grid-column field="{{column.name}}" heading="{{column.label}}" > </sky-grid-column>
+      <sky-grid-column field="{{column.name}}" heading="{{column.label}}" [template]="smartGridRow"> </sky-grid-column>
     </ng-container>
   </sky-list-view-grid>
 </sky-list>
 
 <ng-template let-row="row" let-value="value" #contextMenu>
-
   <sky-dropdown buttonType="context-menu">
     <sky-dropdown-menu>
       <sky-dropdown-item>
@@ -34,6 +33,9 @@
       </sky-dropdown-item>
     </sky-dropdown-menu>
   </sky-dropdown>
-
 </ng-template>
 
+<ng-template #smartGridRow let-row="row" let-value="value">
+  <span *ngIf="complexObject(value)">{{value.name}}</span>
+  <span *ngIf="!complexObject(value)">{{value}}</span>
+</ng-template>

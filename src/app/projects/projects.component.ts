@@ -18,8 +18,8 @@ export class ProjectComponent {
   public anchors: BuilderAnchorItem[] = [];
   constructor() {
 
-    let model: ProjectModel = new ProjectModel();
-    model._fields = [
+    let dataModel: ProjectModel = new ProjectModel();
+    dataModel.fields = [
       {
         type: 'text',
         name: 'name',
@@ -31,15 +31,19 @@ export class ProjectComponent {
         name: 'description',
         label: 'Description'
       },
+
       {
         type: 'hidden',
         name: 'id'
       }
     ];
-    model.title = 'Project';
-    this.projects.subscribe((s) => { console.log('projects', s); });
+    let pageConfig = { 'title': 'Project' };
 
-    const anchor = new BuilderAnchorItem(BuilderAnchorComponent, model, this.projects);
+    const anchor = new BuilderAnchorItem(
+      BuilderAnchorComponent,
+      dataModel,
+      this.projects,
+      pageConfig);
     this.anchors.push(anchor);
   }
 }

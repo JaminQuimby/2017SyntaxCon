@@ -34,16 +34,22 @@ function ngOnInitHook(
   if (hook === 'ngOnInit') {
     const selfOnInit = constructor.prototype[hook];
     let storedSubject: Subject<Array<SimplePage>> = new Subject();
-    let storedPage: Array<SimplePage>;
+    // Empty Array for empty container.
+    let storedPage: Array<SimplePage> = [];
     storedSubject.subscribe((changes) => {
       changes.forEach(newPage => {
         const currentPage: SimplePage = {
           ...storedPage.find((obj: SimplePage) => obj.id === newPage.id)
         };
         if (!_.isEqual(newPage, currentPage)) {
-          const nextPage: SimplePage = { ...currentPage, ...newPage };
-          databaseService.save(nextPage);
-          //  console.log('attempt an update', nextPage);
+          if (Object.keys(newPage).length === 1 && newPage.hasOwnProperty('id')) {
+            // delete
+            databaseService.save(newPage);
+          } else {
+            // update
+            const nextPage: SimplePage = { ...currentPage, ...newPage };
+            databaseService.save(nextPage);
+          }
         }
       });
     });
@@ -54,6 +60,7 @@ function ngOnInitHook(
         return from(storedSubject);
       },
       set: (page) => {
+        console.log('setpage', page);
         if (storedPage === page) {
           return;
         }
@@ -81,9 +88,10 @@ function ngOnInitHook(
               configurable: true,
               enumerable: true,
               get: () => {
-                return storedSubject;
+                return from(storedSubject);
               },
               set: (page) => {
+                console.log('setPage2', page);
                 if (storedPage === page) {
                   return;
                 }

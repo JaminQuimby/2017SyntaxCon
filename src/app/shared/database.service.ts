@@ -53,6 +53,7 @@ export class DatabaseService {
 
   public save({ id, ...params }: any) {
     let mutated = this.mutations(params);
+    console.log('db save', params);
     if (id) {
       const page: SimplePage = { 'id': id, ...mutated };
       Object.keys(mutated).length !== 0 ? this.update(page) : this.remove(id);
@@ -70,7 +71,6 @@ export class DatabaseService {
   }
 
   private update({ id, ...params }: SimplePage) {
-    console.log('params', params);
     this.databasesCollection.doc(id).update(params);
   }
 
