@@ -1,9 +1,9 @@
+import { BuilderAnchorComponent } from '../shared/form-builder/builder-anchor.component';
+import { BuilderAnchorItem } from '../shared/form-builder/builder-anchor.items';
 import { Component, ChangeDetectionStrategy } from '@angular/core';
-import { TaskModel } from './task.model';
 import { Container } from '../shared/database.decorator';
 import { Subject } from 'rxjs';
-import { BuilderAnchorItem } from '../shared/form-builder/builder-anchor.items';
-import { BuilderAnchorComponent } from '../shared/form-builder/builder-anchor.component';
+import { TaskModel, taskSchematics } from './task.model';
 
 @Component({
   selector: 'uapi-tasks',
@@ -16,54 +16,10 @@ export class TaskComponent {
   public tasks: Subject<Array<TaskModel>>;
   public anchors: BuilderAnchorItem[] = [];
   constructor() {
+    const pageConfig = { 'title': 'Task' };
     let dataModel = new TaskModel();
-    dataModel.fields = [
-      {
-        type: 'hidden',
-        name: 'id'
-      },
-      {
-        type: 'dropdown',
-        name: 'project',
-        label: 'Project',
-        required: true,
-        container: 'users/projects'
-      },
-      {
-        type: 'dropdown',
-        name: 'status',
-        label: 'Status',
-        required: true,
-        options: [
-          { id: 'New', name: 'New' },
-          { id: 'Ready', name: 'Ready' },
-          { id: 'In Progress', name: 'In Progress' },
-          { id: 'Review', name: 'Review' },
-          { id: 'Done', name: 'Done' },
-          { id: 'Archived', name: 'Archived' }
-        ]
-      },
-      {
-        type: 'text',
-        name: 'person',
-        label: 'Person'
-      },
-      {
-        type: 'text',
-        name: 'name',
-        label: 'Name'
-      },
-      {
-        type: 'text',
-        name: 'description',
-        label: 'Description',
-        placeholder: '',
-        multiline: true
-      }
-    ];
-    let pageConfig = { 'title': 'Task' };
+    dataModel.fields = taskSchematics;
     const anchor = new BuilderAnchorItem(BuilderAnchorComponent, dataModel, this.tasks, pageConfig);
     this.anchors.push(anchor);
   }
-
 }
